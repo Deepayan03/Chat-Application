@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import connectDb from "./config/dbConfig.js";
 import userRoutes from "./Routers/userRoutes.js"
 import errorMiddleWare from "./middlewares/errorMiddleware.js";
+import chatRoutes from "./Routers/chatRoutes.js";
 const app = express();
 app.use(express.json());// TO accept json data
 dotenv.config();
@@ -13,8 +14,9 @@ app.use(cors());
 
 // Use morgan for logging
 app.use(morgan("dev"));
-app.use("/api/user",userRoutes);
 // Define your API routes here
+app.use("/api/user",userRoutes);
+app.use("/api/chat",chatRoutes)
 app.get("/api/chats", (req, res) => {
     let chatData="Server is working properly"
 

@@ -12,7 +12,7 @@ const schema={
     },
     users:[{
         type:Schema.Types.ObjectId,
-        ref:User
+        ref:"Chat_App_Users"
     }],
     latestMessage:{
         type:Schema.Types.ObjectId,
@@ -20,7 +20,7 @@ const schema={
     },
     groupAdmin:{
         type:Schema.Types.ObjectId,
-        ref:"User"
+        ref:"Chat_App_Users"
     }
 }
 const chatModel= new Schema(schema,{timestamps:true});
