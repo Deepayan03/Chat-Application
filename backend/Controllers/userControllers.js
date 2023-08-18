@@ -53,6 +53,7 @@ const login = async (req, res, next) => {
 }
 
 const allUsers = async (req, res, next) => {
+  console.log(req.query.search);
   const key = req.query.search ?
     {
       $or: [
@@ -62,8 +63,12 @@ const allUsers = async (req, res, next) => {
     }
     :
     {};
-    const users=await User.find(key).find({_id:{$ne :req.user._id}});
-    res.send(users)
+    const users=await User.find(key).find({_id:{$ne :req.user._id}}).select("-password");
+    console.log(users);
+    res.status(200).json({
+      success:true,
+      data:users
+    });
 }
 export {
   register,
