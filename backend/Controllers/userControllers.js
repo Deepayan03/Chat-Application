@@ -65,10 +65,7 @@ const allUsers = async (req, res, next) => {
     {};
     const users=await User.find(key).find({_id:{$ne :req.user._id}}).select("-password");
     console.log(users);
-    res.status(200).json({
-      success:true,
-      data:users
-    });
+    res.send(users);
 }
 export {
   register,

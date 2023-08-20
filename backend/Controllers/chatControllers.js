@@ -47,6 +47,7 @@ const accessChat = async (req, res, next) => {
 
 const fetchChats = async (req, res, next) => {
   try {
+    console.log("User    "+req.user);
     const result = await Chat.find({
       users: { $elemMatch: { $eq: req.user._id } },
     })
@@ -58,10 +59,11 @@ const fetchChats = async (req, res, next) => {
       path: "latestMessage.sender",
       select: "name,avatar,email",
     });
+    console.log(results)
 
     res.status(200).send(results);
   } catch (error) {
-    return next(new AppError(e.message, 500));
+    return next(new AppError(error.message, 500));
   }
 };
 

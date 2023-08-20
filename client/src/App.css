@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Work+Sans:wght@300&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Work+Sans:wght@300&display=swap");
 
-.App{
+.App {
   min-height: 100vh;
-  display:flex;
-  background-image: url("https://c0.wallpaperflare.com/preview/179/449/151/technology-networking-abstract-business.jpg");
+  display: flex;
+  background-image: url("https://cdn.dribbble.com/users/1003944/screenshots/15741863/media/96a2668dbf0b4da82efca00d60011ca8.gif");
   background-position: center;
   background-size: cover;
 }
