@@ -3,7 +3,7 @@ import { Box, Text } from "@chakra-ui/layout";
 
 const UserListItem = ({ handleFunction,user }) => {
 //   const {data}=user;
-//   console.log(user)
+  // console.log(user)
     // console.log(data)
   return (
     <Box

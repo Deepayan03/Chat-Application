@@ -10,18 +10,11 @@ import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider.js";
 
 const MyChats = ({ fetchAgain }) => {
-  
 
-  const {selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-  const [loggedUser, setLoggedUser] = useState();
+  const { selectedChat, setSelectedChat, user, chats, setChats,refresh,setRefresh,loggedUser, setLoggedUser, reRender,setReRender } = ChatState();
 
   const toast = useToast();
-  const updateChats=(data)=>{
-    setChats(data);
-    chats.forEach((element) => {
-      console.log(element);
-    });
-  }
+
   const fetchChats = async () => {
     // console.log(user._id);
     try {
@@ -32,8 +25,7 @@ const MyChats = ({ fetchAgain }) => {
       };
 
       const { data } = await axios.get("/api/chat", config);
-      updateChats(data);
-      console.log(chats);
+      setChats(data);
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -46,27 +38,22 @@ const MyChats = ({ fetchAgain }) => {
     }
   };
 
-
   useEffect(() => {
-    let Data;
-    const fetch=async()=>{
-      Data=await JSON.parse(localStorage.getItem("userInfo"));
-      console.log(Data);
-      setLoggedUser(Data.data);
-    }
-    fetch();
-    // eslint-disable-next-line
-  }, [fetchAgain]);
-  useEffect(()=>{
+    const lg= JSON.parse(localStorage.getItem("userInfo"));
+    setLoggedUser(lg.data);
     fetchChats();
-  },[fetchAgain]);
+    console.log("I am being fetched")
+    setReRender(false)
+    // eslint-disable-next-line
+  }, [refresh,reRender]);
+
   return (
     <Box
-      display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+      d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
       alignItems="center"
       p={3}
-      bg="black"
+      bg="white"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
@@ -76,17 +63,15 @@ const MyChats = ({ fetchAgain }) => {
         px={3}
         fontSize={{ base: "28px", md: "30px" }}
         fontFamily="Work sans"
-        display="flex"
+        d="flex"
         w="100%"
         justifyContent="space-between"
         alignItems="center"
-        color="white"
       >
         My Chats
         {/* <GroupChatModal> */}
           <Button
-            display="flex"
-            bgColor={"yellow"}
+            d="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
             rightIcon={<AddIcon />}
           >
@@ -95,10 +80,10 @@ const MyChats = ({ fetchAgain }) => {
         {/* </GroupChatModal> */}
       </Box>
       <Box
-        display="flex"
+        d="flex"
         flexDir="column"
         p={3}
-        bg="Teal"
+        bg="#F8F8F8"
         w="100%"
         h="100%"
         borderRadius="lg"
@@ -110,7 +95,7 @@ const MyChats = ({ fetchAgain }) => {
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "white"}
+                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                 color={selectedChat === chat ? "white" : "black"}
                 px={3}
                 py={2}
@@ -118,10 +103,8 @@ const MyChats = ({ fetchAgain }) => {
                 key={chat._id}
               >
                 <Text>
-                {console.log(chat)}
-                  {
-                  !chat.isGroupChat
-                    ? getSender(user.data, chat.users)
+                  {!chat.isGroupChat
+                    ? getSender(loggedUser, chat.users)
                     : chat.chatName}
                 </Text>
                 {/* {chat.latestMessage && (

@@ -44,6 +44,8 @@ function SideDrawer() {
     user,
     chats,
     setChats,
+    setRefresh,
+    loggedUser
   } = ChatState();
 
   const toast = useToast();
@@ -52,6 +54,7 @@ function SideDrawer() {
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
+    setChats([]);
     history.push("/");
   };
 
@@ -69,7 +72,7 @@ function SideDrawer() {
 
     try {
       setLoading(true);
-      console.log(user);
+      // console.log(user);
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -104,10 +107,14 @@ function SideDrawer() {
       };
       const { data } = await axios.post(`/api/chat`, { userId }, config);
 
-      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      if (!chats.find((c) => c._id === data._id)) {
+        console.log(data, ...chats);
+        setChats([data, ...chats])
+      };
       setSelectedChat(data);
-      console.log(searchResult);
+      // console.log("SearchResult---->"+searchResult[0].name);
       setLoadingChat(false);
+      setRefresh(true);
       onClose();
     } catch (error) {
       toast({
@@ -172,11 +179,12 @@ function SideDrawer() {
           {/* </Menu> */}
           <Menu>
             <MenuButton as={Button} bg="yellow" rightIcon={<ChevronDownIcon />}>
+              {console.log(user)}
               <Avatar
                 size="sm"
                 cursor="pointer"
-                name={user.data.name}
-                src={user.data.avatar}
+                name={loggedUser.name}
+                src={loggedUser.avatar}
               />
             </MenuButton>
             <MenuList bg="yellow">
@@ -214,6 +222,7 @@ function SideDrawer() {
                   user={res}
                   handleFunction={() => accessChat(res._id)}
                 />
+                
               ))
             )}
             {loadingChat && <Spinner ml="auto" display="flex" color="blue"/>}

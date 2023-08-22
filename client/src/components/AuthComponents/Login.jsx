@@ -2,6 +2,7 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, V
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import axios from "axios"
+import { ChatState } from '../../Context/ChatProvider'
 const Login = () => {
   const toast=useToast();
   const[show,setShow]=useState();
@@ -10,6 +11,7 @@ const Login = () => {
   const[loading,setLoading]=useState(false);
   const handleClick=()=>{setShow(!show)};
   const history=useHistory();
+  const {setRefresh,setLoggedUser,setReRender}=ChatState();
   const submitHandler=async()=>{
     setLoading(true);
     if( !email || !password ){
@@ -40,6 +42,8 @@ const Login = () => {
       JSON.stringify(data)
       localStorage.setItem("userInfo",JSON.stringify(data));
       setLoading(false);
+      setLoggedUser(data);
+      setReRender(true);
       history.push("/chats")
     } catch (error) {
       toast({
@@ -51,6 +55,7 @@ const Login = () => {
         position:'bottom',
       });
       setLoading(false);
+      setRefresh(false)
     }
   };
   return (
