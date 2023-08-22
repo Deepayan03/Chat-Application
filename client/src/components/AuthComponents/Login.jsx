@@ -11,7 +11,7 @@ const Login = () => {
   const[loading,setLoading]=useState(false);
   const handleClick=()=>{setShow(!show)};
   const history=useHistory();
-  const {setRefresh,setLoggedUser,setReRender}=ChatState();
+  const {setRefresh,setLoggedUser,setUser}=ChatState();
   const submitHandler=async()=>{
     setLoading(true);
     if( !email || !password ){
@@ -26,11 +26,6 @@ const Login = () => {
       return;
     }
     try {
-      const config={
-        headers:{
-          "Content-type":"application/json"
-        },
-      };
       const {data}=await axios.post("/api/user/login",{email,password});
       toast({
         title: "LoggedIn Successfully",
@@ -43,7 +38,7 @@ const Login = () => {
       localStorage.setItem("userInfo",JSON.stringify(data));
       setLoading(false);
       setLoggedUser(data);
-      setReRender(true);
+      setUser(data);
       history.push("/chats")
     } catch (error) {
       toast({

@@ -8,7 +8,6 @@ const ChatProvider = ({ children }) => {
   const [selectedChat, setSelectedChat] = useState();
   const [chats, setChats] = useState([]);
   const [loggedUser, setLoggedUser] = useState(0);
-const [reRender,setReRender]=useState(false);
   const history = useHistory();
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -30,8 +29,6 @@ const [reRender,setReRender]=useState(false);
         setRefresh,
         loggedUser,
         setLoggedUser,
-        reRender,
-        setReRender
       }}
     >
       {children}

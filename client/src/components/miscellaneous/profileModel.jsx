@@ -1,9 +1,11 @@
 import { ViewIcon } from '@chakra-ui/icons';
-import { Button, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
 import React from 'react'
+import { ChatState } from '../../Context/ChatProvider';
 
 const ProfileModel = ({user,children}) => {
     const {isOpen,onOpen,onClose}=useDisclosure();
+    const {loggedUser}=ChatState();
   return <>
   {
     children?<span onClick={onOpen}>{children}</span>:
@@ -19,9 +21,10 @@ const ProfileModel = ({user,children}) => {
   size={"lg"}
   isCentered
   isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+        <ModalOverlay/>
         <ModalContent
         height={"450px"}
+        bg={"yellow"}
         >
           <ModalHeader
           fontSize={"40px"}
@@ -29,7 +32,14 @@ const ProfileModel = ({user,children}) => {
           display={"flex"}
           justifyContent={"center"}
           alignContent={"center"}
-          >{user.data.name}</ModalHeader>
+          ><Box
+          p={"10px"}
+          bg={"deeppink"}
+          borderRadius={"10px"}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          >{loggedUser.name}</Box></ModalHeader>
           <ModalCloseButton />
           <ModalBody
           display={"flex"}
@@ -40,18 +50,18 @@ const ProfileModel = ({user,children}) => {
            <Image
            borderRadius="full"
            boxSize={"150px"}
-           src={user.data.avatar}
-           alt={user.data.name}
+           src={loggedUser.avatar}
+           alt={loggedUser.name}
            />
            <Text
            fontSize={{base:"28px",md:"30px"}}
            >
-            {user.data.email}
+            {loggedUser.email}
            </Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button bg="deeppink" mr={3} onClick={onClose}>
              Close
             </Button>
           </ModalFooter>
@@ -59,8 +69,6 @@ const ProfileModel = ({user,children}) => {
       </Modal>
   
   </>
- 
-  
 }
 
 export default ProfileModel;
