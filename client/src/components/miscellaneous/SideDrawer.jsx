@@ -174,10 +174,10 @@ function SideDrawer() {
         </div>
       </Box>
 
-      <Drawer placement="left" onClose={onClose} isOpen={isOpen} bg="yellow">
+      <Drawer placement="left" onClose={onClose} isOpen={isOpen} bgColor="yellow">
         <DrawerOverlay />
-        <DrawerContent bg="black">
-          <DrawerHeader color="white" bg={"grey"} borderBottomWidth="1px">Search Users</DrawerHeader>
+        <DrawerContent bgColor="black">
+          <DrawerHeader color="white" borderBottomWidth="1px">Search Users</DrawerHeader>
           <DrawerBody>
             <Box display="flex" pb={2}>
               <Input

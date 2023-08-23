@@ -28,7 +28,7 @@ const HomePage = () => {
                 <Text color="white" fontSize="4xl" fontFamily="Work sans">Simply Chat</Text>
             </Box>
             <Box bg="black" w="100%" p={4} borderRadius="20px" color="deeppink" borderWidth="1px">
-                <Tabs variant='soft-rounded' colorScheme='green'>
+                <Tabs variant='soft-rounded' >
                     <TabList mb="1em">
                         <Tab width="50%">Login</Tab>
                         <Tab width="50%">Sign Up</Tab>

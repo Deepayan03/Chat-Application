@@ -24,7 +24,7 @@ const ProfileModel = ({user,children}) => {
         <ModalOverlay/>
         <ModalContent
         height={"450px"}
-        bg={"yellow"}
+        bgColor={"yellow"}
         >
           <ModalHeader
           fontSize={"40px"}
@@ -34,7 +34,7 @@ const ProfileModel = ({user,children}) => {
           alignContent={"center"}
           ><Box
           p={"10px"}
-          bg={"deeppink"}
+          bgColor={"deeppink"}
           borderRadius={"10px"}
           display={"flex"}
           justifyContent={"center"}
@@ -61,7 +61,7 @@ const ProfileModel = ({user,children}) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button bg="deeppink" mr={3} onClick={onClose}>
+            <Button bgColor="deeppink" mr={3} onClick={onClose}>
              Close
             </Button>
           </ModalFooter>

@@ -30,9 +30,6 @@ const SignUp = () => {
       data.append("file",avatar);
       data.append("upload_preset","chat-app");
       data.append("cloud_name","dnymefrvq");
-      // for (let pair of data.entries()) {
-      //   console.log(pair[0], pair[1]);
-      // }
       setLoading(true);   
       try {
       const response=await fetch("https://api.cloudinary.com/v1_1/dnymefrvq/image/upload",{
@@ -174,7 +171,6 @@ const SignUp = () => {
       <Button
       width="100%"
       _hover={{ bg: '#ebedf0' }}
-      colorScheme='yellow'
       style={{marginTop:15}}
       onClick={submitHandler}
       isLoading={loading}>

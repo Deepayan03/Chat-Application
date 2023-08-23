@@ -8,6 +8,7 @@ import ChatLoading from "./ChatLoading";
 // import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider.js";
+import GroupChatModal from "./miscellaneous/GroupChatModal.jsx";
 
 const MyChats = ({ fetchAgain }) => {
 
@@ -69,6 +70,7 @@ const MyChats = ({ fetchAgain }) => {
         color={"white"}
       >
         My Chats
+        <GroupChatModal>
           <Button
             display="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
@@ -77,12 +79,13 @@ const MyChats = ({ fetchAgain }) => {
           >
             New Group Chat
           </Button>
+        </GroupChatModal>
       </Box>
       <Box
         display="flex"
         flexDir="column"
         p={3}
-        bg="grey"
+        bgColor={"greenyellow"}
         w="100%"
         h="100%"
         borderRadius="lg"

@@ -82,8 +82,7 @@ const Login = () => {
       <FormControl id="button">
       <Button
       width="100%"
-      _hover={{ bg: '#ebedf0' }}
-      colorScheme='yellow'
+      _hover={{ bgColor: '#ebedf0' }}
       style={{marginTop:15}}
       onClick={submitHandler}
       isLoading={loading}>
@@ -91,8 +90,7 @@ const Login = () => {
       </Button>
       <Button
       width="100%"
-      _hover={{ bg: '#ebedf0' }}
-      colorScheme='yellow'
+      _hover={{ bgColor: '#ebedf0' }}
       style={{marginTop:15}}
       onClick={()=>{
         setEmail("johnnySinsAllRounder@gmail.com");
