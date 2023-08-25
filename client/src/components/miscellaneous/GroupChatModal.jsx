@@ -26,7 +26,7 @@ const GroupChatModal = ({ children }) => {
   const [searchResult, setsearchResult] = useState([]);
   const [loading, setloading] = useState(false);
   const toast = useToast();
-  const { user } = ChatState();
+  const { user , chats, setChats , refresh,  setRefresh} = ChatState();
 
   const handleSearch = async (query) => {
     if (!query) {
@@ -56,7 +56,52 @@ const GroupChatModal = ({ children }) => {
       console.log(error);
     }
   };
-  const handleSubmit = () => {};
+  const handleSubmit = async() => {
+    if(!groupChatName || !selectedUsers){
+      toast({
+        title:"Please fill all the fields",
+        status:"warning",
+        duration:5000,
+        isClosable:true,
+        position:"top"
+      });
+      return
+    }
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const data=await axios.post("/api/chat/group",{
+        name:groupChatName,
+        users:JSON.stringify(selectedUsers.map((u)=>u._id)),
+      },config);
+      setChats([data,...chats]);
+      onClose();
+      toast({
+        title:"Group Chat created",
+        status:"success",
+        duration:5000,
+        isClosable:true,
+        position:"bottom"
+      });
+      setRefresh(!refresh);
+      setgroupChatName('');
+      setselectedUsers([]);
+      setsearch('');
+      setsearchResult([]);
+    } catch (error) {
+      toast({
+        title:"Couldn't create the group chat",
+        status:"error",
+        duration:5000,
+        isClosable:true,
+        position:"bottom"
+      });
+    }
+  };
   const handleDelete = (delUser) => {
     setselectedUsers(
       selectedUsers.filter((selected) => selected._id !== delUser._id)
@@ -76,7 +121,6 @@ const GroupChatModal = ({ children }) => {
         duration:5000
         
       });
-      console.log("I am causing this error")
       return;
     } else 
     setselectedUsers([...selectedUsers, addedUser]);
@@ -112,7 +156,6 @@ const GroupChatModal = ({ children }) => {
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </FormControl>
-            {console.log(selectedUsers)}
             <Box w="100%" display={"flex"} flexWrap={"wrap"}>
               {selectedUsers.map((item) => (
                 <UserBadgeItem

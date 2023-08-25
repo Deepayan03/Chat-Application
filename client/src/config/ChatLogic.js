@@ -1,4 +1,6 @@
 export const getSender = (loggedUser, users) => {
+  console.log(loggedUser);
+  console.log(users);
   if (!loggedUser ) {
     return "Unknown Logged User";
     

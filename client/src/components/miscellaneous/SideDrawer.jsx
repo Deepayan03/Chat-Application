@@ -41,7 +41,8 @@ function SideDrawer() {
     chats,
     setChats,
     setRefresh,
-    loggedUser
+    loggedUser,
+    refresh
   } = ChatState();
 
   const toast = useToast();
@@ -92,7 +93,7 @@ function SideDrawer() {
   };
 
   const accessChat = async (userId) => {
-    console.log(userId);
+    // console.log(userId);
     try {
       setLoadingChat(true);
       const config = {
@@ -104,13 +105,13 @@ function SideDrawer() {
       const { data } = await axios.post(`/api/chat`, { userId }, config);
 
       if (!chats.find((c) => c._id === data._id)) {
-        console.log(data, ...chats);
+        // console.log(data, ...chats);
         setChats([data, ...chats])
       };
       setSelectedChat(data);
       // console.log("SearchResult---->"+searchResult[0].name);
       setLoadingChat(false);
-      setRefresh(true);
+      setRefresh(!refresh);
       onClose();
     } catch (error) {
       toast({
@@ -155,7 +156,7 @@ function SideDrawer() {
            </Menu>
           <Menu>
             <MenuButton as={Button} bg="yellow" rightIcon={<ChevronDownIcon />}>
-              {console.log(user)}
+              {/* {console.log(user)} */}
               <Avatar
                 size="sm"
                 cursor="pointer"
