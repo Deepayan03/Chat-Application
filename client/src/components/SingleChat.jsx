@@ -2,7 +2,7 @@ import React from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { Box, IconButton, Text } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { getSender } from "../config/ChatLogic";
+import { getSender, getSenderFull } from "../config/ChatLogic";
 import ProfileModel from "./miscellaneous/profileModel";
 
 const SingleChat = () => {
@@ -29,7 +29,7 @@ const SingleChat = () => {
                     !selectedChat.isGroupChat?(
                         <>
                             {getSender(loggedUser,selectedChat.users)}
-                            <ProfileModel user={getSender(loggedUser,selectedChat.users)}/>
+                            <ProfileModel user={getSenderFull(loggedUser,selectedChat.users)}/>
                         </>
                     ):(
                        <>

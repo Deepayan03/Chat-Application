@@ -165,7 +165,7 @@ function SideDrawer() {
               />
             </MenuButton>
             <MenuList bg="yellow">
-              <ProfileModel user={user} bg="yellow">
+              <ProfileModel user={loggedUser} bg="yellow">
                 <MenuItem bg="yellow">My Profile</MenuItem>{" "}
               </ProfileModel>
               <MenuDivider color={"black"}/>

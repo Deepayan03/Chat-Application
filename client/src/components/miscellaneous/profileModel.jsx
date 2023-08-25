@@ -1,11 +1,10 @@
 import { ViewIcon } from '@chakra-ui/icons';
 import { Box, Button, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
 import React from 'react'
-import { ChatState } from '../../Context/ChatProvider';
 
 const ProfileModel = ({user,children}) => {
     const {isOpen,onOpen,onClose}=useDisclosure();
-    const {loggedUser}=ChatState();
+    // const {user}=ChatState();
   return <>
   {
     children?<span onClick={onOpen}>{children}</span>:
@@ -39,7 +38,7 @@ const ProfileModel = ({user,children}) => {
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
-          >{loggedUser.name}</Box></ModalHeader>
+          >{user.name}</Box></ModalHeader>
           <ModalCloseButton />
           <ModalBody
           display={"flex"}
@@ -50,13 +49,13 @@ const ProfileModel = ({user,children}) => {
            <Image
            borderRadius="full"
            boxSize={"150px"}
-           src={loggedUser.avatar}
-           alt={loggedUser.name}
+           src={user.avatar}
+           alt={user.name}
            />
            <Text
            fontSize={{base:"28px",md:"30px"}}
            >
-            {loggedUser.email}
+            {user.email}
            </Text>
           </ModalBody>
 
