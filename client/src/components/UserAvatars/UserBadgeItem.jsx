@@ -15,7 +15,7 @@ const UserBadgeItem = ({item,handleFunction}) => {
     fontSize={12}
     cursor={"pointer"}
     >
-    {item.name}
+    { item.name }
     <CloseIcon onClick={handleFunction}/>
     </Box>
   )

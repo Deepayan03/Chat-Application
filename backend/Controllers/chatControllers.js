@@ -125,7 +125,7 @@ const renameGroup = async (req, res, next) => {
 const addToGroup = async (req, res, next) => {
   const { chatId, userId } = req.body;
   try {
-    const removed = await Chat.findByIdAndUpdate(
+    const added = await Chat.findByIdAndUpdate(
       chatId,
       {
         $push: { users: userId },
@@ -136,13 +136,13 @@ const addToGroup = async (req, res, next) => {
     )
       .populate("users", "-password")
       .populate("groupAdmin", "-password");
-    if (!removed) {
+    if (!added) {
       return next(new AppError("Chat not found", 404));
     } else {
       res.status(200).json({
         success: true,
         message:"User added successfully",
-        data: removed,
+        data: added,
       });
     }
   } catch (error) {

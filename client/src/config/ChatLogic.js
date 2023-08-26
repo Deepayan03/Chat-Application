@@ -1,6 +1,4 @@
 export const getSender = (loggedUser, users) => {
-  console.log(loggedUser);
-  console.log(users);
   if (!loggedUser ) {
     return "Unknown Logged User";
     
@@ -12,14 +10,12 @@ export const getSender = (loggedUser, users) => {
 };
 
 export const getSenderFull=(loggedUser, users)=>{
-  // console.log(loggedUser);
-  // console.log(users);
-  // if (!loggedUser ) {
-  //   return "Unknown Logged User";
+  if (!loggedUser ) {
+    return "Unknown Logged User";
     
-  // }
-  // else if(!users || !users[0] || !users[1]){
-  //   return "Loading....."
-  // }
+  }
+  else if(!users || !users[0] || !users[1]){
+    return "Loading....."
+  }
   return users[0]._id === loggedUser._id? users[1]: users[0];
 };
