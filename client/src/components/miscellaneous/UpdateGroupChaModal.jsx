@@ -77,32 +77,35 @@ const UpdateGroupChatModal = () => {
     setSearchResult([]);
     onClose();
   };
-  const handleRemove = async(userToBeRemoved) => {
-    console.log(selectedChat.groupAdmin._id,user._id)
-    if(selectedChat.groupAdmin._id===loggedUser._id){
-        toast({
-            title: "Admin cannot leave the group",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom",
-          });
-          return; 
+  const handleRemove = async (userToBeRemoved) => {
+    console.log(selectedChat.groupAdmin._id, user._id);
+    if (selectedChat.groupAdmin._id === loggedUser._id) {
+      toast({
+        title: "Admin cannot leave the group",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
     }
-    if(selectedChat.groupAdmin._id!==loggedUser._id && userToBeRemoved._id!==loggedUser._id){
-        toast({
-            title: "Only admins can remove someone",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom",
-          });
-          return; 
+    if (
+      selectedChat.groupAdmin._id !== loggedUser._id &&
+      userToBeRemoved._id !== loggedUser._id
+    ) {
+      toast({
+        title: "Only admins can remove someone",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
     }
     try {
-        setLoading(true);
-        const config = {
-             headers: {
+      setLoading(true);
+      const config = {
+        headers: {
           Authorization: `Bearer ${user.token}`,
         },
       };
@@ -114,12 +117,14 @@ const UpdateGroupChatModal = () => {
         },
         config
       );
-      const data=res.data.data;
-      userToBeRemoved._id===loggedUser._id? setSelectedChat(): setSelectedChat(data);
+      const data = res.data.data;
+      userToBeRemoved._id === loggedUser._id
+        ? setSelectedChat()
+        : setSelectedChat(data);
       setRefresh(!refresh);
       setLoading(false);
     } catch (error) {
-    console.log(error);
+      console.log(error);
       toast({
         title: "Error Occured !",
         description: error.response.data.message,
@@ -171,7 +176,7 @@ const UpdateGroupChatModal = () => {
       });
       return;
     }
-    console.log(selectedChat.groupAdmin._id,loggedUser._id);
+    console.log(selectedChat.groupAdmin._id, loggedUser._id);
     if (selectedChat.groupAdmin._id !== loggedUser._id) {
       toast({
         title: "Only admins can add someone",
@@ -273,7 +278,7 @@ const UpdateGroupChatModal = () => {
               />
             </FormControl>
             {loading ? (
-              <Spinner color="blue"/>
+              <Spinner color="blue" />
             ) : (
               searchResult
                 ?.slice(0, 4)

@@ -1,6 +1,6 @@
 import React from "react";
 import { ChatState } from "../Context/ChatProvider";
-import { Box, IconButton, Text } from "@chakra-ui/react";
+import { Avatar, Box, IconButton, Text } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender, getSenderFull } from "../config/ChatLogic";
 import ProfileModel from "./miscellaneous/profileModel";
@@ -33,13 +33,18 @@ const SingleChat = () => {
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
             />
-            {console.log(selectedChat)}
             {!selectedChat.isGroupChat ? (
               <>
-                {getSender(loggedUser, selectedChat.users)}
+               {getSender(loggedUser, selectedChat.users)}
                 <ProfileModel
                   user={getSenderFull(loggedUser, selectedChat.users)}
-                />
+                >
+                  {console.log(selectedChat)}
+                   <Avatar src={getSenderFull(loggedUser, selectedChat.users).avatar} name={selectedChat.name}
+                    cursor={"pointer"}
+                   >
+                  </Avatar>
+                  </ProfileModel>
               </>
             ) : (
               <>{selectedChat.chatName.toUpperCase()}
