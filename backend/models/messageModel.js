@@ -3,7 +3,7 @@ import mongoose,{Schema} from "mongoose";
 const msgSchema={
     sender:{
         type:Schema.Types.ObjectId,
-        ref:"User"
+        ref:"Chat_App_Users"
     },
     content:{
         type:String,
