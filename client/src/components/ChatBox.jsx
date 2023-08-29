@@ -5,7 +5,6 @@ import SingleChat from './SingleChat';
 
 const ChatBox = () => {
   const {selectedChat}=ChatState();
-  console.log(selectedChat);
   return (
    <Box display={{base:selectedChat?"flex":"none" , md:"flex" }}
       // alignItems={"center"}

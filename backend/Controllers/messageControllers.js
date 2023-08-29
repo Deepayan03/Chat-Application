@@ -37,11 +37,10 @@ const sendMessage = async (req, res, next) => {
 const allMessages = async (req, res, next) => {
   try {
     const messages = await Message.find({ chat: req.params.chatId })
-      .populate("sender", "name pic email")
+      .populate("sender", "name avatar email")
       .populate("chat");
     res.json(messages);
     console.log(messages);
-    res.json(messages);
   } catch (error) {
     console.log(error);
     return next(new AppError("Couldnot get all the messages", 400));
