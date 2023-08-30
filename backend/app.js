@@ -1,12 +1,12 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
-import dotenv from "dotenv"
-import connectDb from "./config/dbConfig.js";
-import userRoutes from "./Routers/userRoutes.js"
-import errorMiddleWare from "./middlewares/errorMiddleware.js";
-import chatRoutes from "./Routers/chatRoutes.js";
-import messageRoutes from "./Routers/messageRoutes.js"
+const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const connectDb = require("./config/dbConfig.js");
+const userRoutes = require("./Routers/userRoutes.js");
+const chatRoutes = require("./Routers/chatRoutes.js");
+const messageRoutes = require("./Routers/messageRoutes.js");
+const errorMiddleWare = require("./middlewares/errorMiddleware.js");
 const app = express();
 app.use(express.json());// TO accept json data
 dotenv.config();
@@ -35,4 +35,4 @@ app.all("*",(req,res)=>{
     });
 });
 
-export default app;
+module.exports=app;

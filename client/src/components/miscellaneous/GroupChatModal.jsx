@@ -110,8 +110,8 @@ const GroupChatModal = ({ children }) => {
   const handleGroup = (addedUser) => {
 
     if (selectedUsers.includes(addedUser)) {
-        console.log("Selected  "+selectedUsers)
-        console.log(addedUser)
+        // console.log("Selected  "+selectedUsers)
+        // console.log(addedUser)
        toast({
         position:"top",
         isClosable:"true",

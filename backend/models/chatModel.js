@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const schema={
     chatName: {
@@ -29,4 +29,4 @@ const chatModel= new Schema(schema,{timestamps:true});
 const Chat =mongoose.model("Chat",chatModel);
 
 
-export default Chat;
+module.exports=Chat;

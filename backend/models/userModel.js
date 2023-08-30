@@ -1,5 +1,6 @@
-import mongoose, { Schema } from "mongoose";
-import bcrypt from "bcrypt";
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const bcrypt = require("bcrypt");
 const schema = {
   name: {
     type: String,
@@ -35,5 +36,4 @@ userSchema.pre("save", async function (next) {
   next();
 });
 const User = mongoose.model("Chat_App_Users", userSchema);
-
-export default User;
+module.exports= User;

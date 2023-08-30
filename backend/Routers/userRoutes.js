@@ -1,12 +1,10 @@
-import { Router } from "express";
-import {allUsers, login, register} from "../controllers/userControllers.js"
-import UserAuth from "../middlewares/AuthMiddleWare.js";
-// import { isLoggedIn } from "../middlewares/AuthMiddleware.js";
-// import upload from "../middlewares/multerMiddleware.js";
+const { Router } = require("express");
+const { allUsers, login, register } = require("../controllers/userControllers.js");
+const UserAuth = require("../middlewares/AuthMiddleWare.js");
 const controller=Router();
 // Defining user routes
 controller.route("/")
 .post(register)
 .get(UserAuth,allUsers);
 controller.post("/login",login);
-export default controller;
+module.exports=controller;

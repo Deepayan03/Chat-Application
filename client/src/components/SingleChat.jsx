@@ -19,11 +19,19 @@ import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChaModal";
 import axios from "axios";
 import "./style.css"
 import ScrollableChat from "./ScrollableChat";
+import io from "socket.io-client"
+const ENDPOINT="http://127.0.0.1:5001";
+
+
+let socket,selectedChatCompare;
+
 const SingleChat = () => {
+  // console.log("component rendered")
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
   const [refreshMessages,setRefreshMessages]=useState(0);
+  const [socketConnected,setSocketConnected]=useState(false);
   const {
     user,
     selectedChat,
@@ -49,9 +57,10 @@ const SingleChat = () => {
         `/api/message/${selectedChat._id}`,
         config
       );
-      console.log(data);
+      // console.log(data);
       setMessages(data);
       setLoading(false);
+      socket.emit("joinChat",selectedChat._id);
       // setRefreshMessages(!refreshMessages);
     } catch (error) {
       toast({
@@ -83,9 +92,10 @@ const SingleChat = () => {
           },
           config
         );
-        console.log(data);
+        // console.log(data);
+        socket.emit("new message", data);
         setMessages([...messages, data]);
-        setRefreshMessages(refreshMessages+1);
+        // setRefreshMessages(refreshMessages+1);
       } catch (error) {
         toast({
           title: "Error Occured",
@@ -98,20 +108,48 @@ const SingleChat = () => {
       }
     }
   };
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", loggedUser);
+    socket.on("connected", () => {
+      setSocketConnected(true)
+      // console.log("connection");
+    });
+    // eslint-disable-next-line
+  }, []);
 
-  useEffect(()=>{
+
+  useEffect(() => {
     setLoading(true);
     fetchMessages();
-    console.log(messages);
-    // eslint-disable-next-line
-  },[selectedChat]);
 
-  useEffect(()=>{
-    // setLoading(true);
-    fetchMessages();
-    console.log(messages);
+    selectedChatCompare = selectedChat;
     // eslint-disable-next-line
-  },[refreshMessages]);
+  }, [selectedChat]);
+
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      console.log(newMessageRecieved)
+      if (
+        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+      } else {
+        setMessages((prev)=>[...prev,newMessageRecieved]);
+      }
+    });
+  });
+  
+
+  // useEffect(()=>{
+  //   // setLoading(true);
+  //   fetchMessages();
+  //   console.log(messages);
+  //   // eslint-disable-next-line
+  // },[refreshMessages]);
+
+
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
     //Typing indicator logic
@@ -216,3 +254,4 @@ const SingleChat = () => {
 };
 
 export default SingleChat;
+ 

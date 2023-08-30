@@ -42,8 +42,8 @@ const MyChats = ({ fetchAgain }) => {
     const lg= JSON.parse(localStorage.getItem("userInfo"));
     setLoggedUser(lg.data);
     fetchChats();
-    console.log("I am being fetched")
-    console.log("This is logged user"+loggedUser);
+    // console.log("I am being fetched")
+    // console.log("This is logged user"+loggedUser);
     // eslint-disable-next-line
   }, [refresh]);
 

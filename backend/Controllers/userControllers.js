@@ -1,13 +1,13 @@
-import generateToken from "../config/generateToken.js";
-import User from "../models/userModel.js";
-import AppError from "../utils/utilError.js";
+const generateToken = require("../config/generateToken.js");
+const User = require("../models/userModel.js");
+const AppError = require("../utils/utilError.js");
 const register = async (req, res, next) => {
   const { name, email, password, avatar } = req.body;
   if (!name || !email || !password) {
     return next(new AppError("Please enter all the fields", 400));
   }
   const userExists = await User.findOne({ email });
-  console.log(userExists)
+  // console.log(userExists)
   if (userExists) {
     return next(new AppError("User already exists", 400));
   }
@@ -35,7 +35,7 @@ const login = async (req, res, next) => {
     return next(new AppError("Please enter all the fields", 400));
   }
   const user = await User.findOne({ email });
-  console.log(user)
+  // console.log(user)
   if (!user) {
     return next(new AppError("Invalid email", 400));
   }
@@ -53,7 +53,7 @@ const login = async (req, res, next) => {
 }
 
 const allUsers = async (req, res, next) => {
-  console.log(req.query.search);
+  // console.log(req.query.search);
   const key = req.query.search ?
     {
       $or: [
@@ -64,10 +64,10 @@ const allUsers = async (req, res, next) => {
     :
     {};
     const users=await User.find(key).find({_id:{$ne :req.user._id}}).select("-password");
-    console.log(users);
+    // console.log(users);
     res.send(users);
 }
-export {
+module.exports= {
   register,
   login,
   allUsers

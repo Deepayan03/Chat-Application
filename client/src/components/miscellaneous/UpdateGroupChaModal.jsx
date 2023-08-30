@@ -48,7 +48,7 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      console.log(user);
+      // console.log(user);
       const res = await axios.put(
         "/api/chat/rename-group",
         {
@@ -78,7 +78,7 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
     onClose();
   };
   const handleRemove = async (userToBeRemoved) => {
-    console.log(selectedChat.groupAdmin._id, user._id);
+    // console.log(selectedChat.groupAdmin._id, user._id);
     if (selectedChat.groupAdmin._id === loggedUser._id) {
       toast({
         title: "Admin cannot leave the group",
@@ -177,7 +177,7 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
       });
       return;
     }
-    console.log(selectedChat.groupAdmin._id, loggedUser._id);
+    // console.log(selectedChat.groupAdmin._id, loggedUser._id);
     if (selectedChat.groupAdmin._id !== loggedUser._id) {
       toast({
         title: "Only admins can add someone",

@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel.js");
 const UserAuth = async (req, res, next) => {
   try {
     let token;
@@ -8,8 +8,8 @@ const UserAuth = async (req, res, next) => {
       req.headers.authorization.startsWith("Bearer")
     ) {
       token = req.headers.authorization.split(" ")[1];
-      console.log(token);
-      console.log(process.env.JWT_SECRET);
+      // console.log(token);
+      // console.log(process.env.JWT_SECRET);
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.id).select("-password");
       return next();
@@ -28,4 +28,4 @@ const UserAuth = async (req, res, next) => {
   }
 };
 
-export default UserAuth;
+module.exports=UserAuth;
