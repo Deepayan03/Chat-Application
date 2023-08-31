@@ -60,7 +60,8 @@ const SingleChat = () => {
       // console.log(data);
       setMessages(data);
       setLoading(false);
-      socket.emit("joinChat",selectedChat._id);
+      // console.log(selectedChat);
+      socket.emit("join chat", selectedChat._id);
       // setRefreshMessages(!refreshMessages);
     } catch (error) {
       toast({
@@ -110,11 +111,11 @@ const SingleChat = () => {
   };
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit("setup", loggedUser);
-    socket.on("connected", () => {
-      setSocketConnected(true)
-      // console.log("connection");
-    });
+    socket.emit("setup", user.data);
+    socket.on("connected", () => setSocketConnected(true));
+    // socket.on("typing", () => setIsTyping(true));
+    // socket.on("stop typing", () => setIsTyping(false));
+
     // eslint-disable-next-line
   }, []);
 
@@ -127,16 +128,16 @@ const SingleChat = () => {
     // eslint-disable-next-line
   }, [selectedChat]);
 
-
+  
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
-      console.log(newMessageRecieved)
       if (
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
+       //Notify
       } else {
-        setMessages((prev)=>[...prev,newMessageRecieved]);
+        setMessages([...messages, newMessageRecieved]);
       }
     });
   });
@@ -227,7 +228,7 @@ const SingleChat = () => {
                   color={"black"}
                 />
                 <InputRightElement
-                  onClick={(event) => sendMessage(event)}
+                  // onClick={(event) => sendMessage(event)}
                   cursor={"pointer"}
                 >
                   <i class="fa fa-paper-plane" aria-hidden="true"></i>

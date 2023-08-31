@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
