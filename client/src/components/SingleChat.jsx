@@ -20,26 +20,35 @@ import axios from "axios";
 import "./style.css"
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client"
+import Lottie from "react-lottie"
+import animationData from "../assets/animation_llzlhaex.json"
 const ENDPOINT="http://127.0.0.1:5001";
 
 
 let socket,selectedChatCompare;
 
 const SingleChat = () => {
-  // console.log("component rendered")
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
-  const [refreshMessages,setRefreshMessages]=useState(0);
   const [socketConnected,setSocketConnected]=useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const {
     user,
     selectedChat,
     setSelectedChat,
-    refresh,
-    setRefresh,
     loggedUser,
   } = ChatState();
+
+  const defaultOptions={
+    loop:true,
+    autoplay:true,
+    animationData: animationData,
+    rendererSettings:{
+      preserveAspectRatio:"XMidYMid slice"
+    }
+  }
   const toast = useToast();
   const fetchMessages = async () => {
     if (!selectedChat) {
@@ -52,7 +61,6 @@ const SingleChat = () => {
       },
     };
     try {
-      !refreshMessages && setLoading(true);
       const { data } = await axios.get(
         `/api/message/${selectedChat._id}`,
         config
@@ -62,7 +70,6 @@ const SingleChat = () => {
       setLoading(false);
       // console.log(selectedChat);
       socket.emit("join chat", selectedChat._id);
-      // setRefreshMessages(!refreshMessages);
     } catch (error) {
       toast({
         title: "Error Occured",
@@ -77,6 +84,7 @@ const SingleChat = () => {
   };
   const sendMessage = async (event) => {
     if ((event.type === "click" || event.key === "Enter") && newMessage) {
+      socket.emit("stop typing",selectedChat._id);
       try {
         const config = {
           headers: {
@@ -96,7 +104,6 @@ const SingleChat = () => {
         // console.log(data);
         socket.emit("new message", data);
         setMessages([...messages, data]);
-        // setRefreshMessages(refreshMessages+1);
       } catch (error) {
         toast({
           title: "Error Occured",
@@ -113,9 +120,8 @@ const SingleChat = () => {
     socket = io(ENDPOINT);
     socket.emit("setup", user.data);
     socket.on("connected", () => setSocketConnected(true));
-    // socket.on("typing", () => setIsTyping(true));
-    // socket.on("stop typing", () => setIsTyping(false));
-
+    socket.on("typing",()=>setIsTyping(true));
+    socket.on("stop typing",()=>setIsTyping(false));
     // eslint-disable-next-line
   }, []);
 
@@ -143,18 +149,28 @@ const SingleChat = () => {
   });
   
 
-  // useEffect(()=>{
-  //   // setLoading(true);
-  //   fetchMessages();
-  //   console.log(messages);
-  //   // eslint-disable-next-line
-  // },[refreshMessages]);
-
-
   const typingHandler = (e) => {
+    console.log(selectedChat);
     setNewMessage(e.target.value);
     //Typing indicator logic
-  };
+    if(!socketConnected){
+      return ;
+    }
+    if(!typing){
+      setTyping(true);
+      socket.emit("typing",selectedChat._id)
+    }
+    let lastTypingTime=new Date().getTime();
+    let timerLength=3000;
+    setTimeout(()=>{
+      var timeNow=new Date().getTime();
+      var timeDiff=timeNow-lastTypingTime;
+      if(timeDiff>=timerLength && typing){
+        socket.emit("stop typing",selectedChat._id);
+        setTyping(false);
+      }
+    },timerLength)
+    };
   return (
     <>
       {selectedChat ? (
@@ -218,6 +234,11 @@ const SingleChat = () => {
               </div> }</>
             )}
             <FormControl onKeyDown={(event) => sendMessage(event)}>
+              {!typing && isTyping?<div><Lottie
+                options={defaultOptions}
+                width={70}
+                style={{marginBottom:15,marginLeft:0}}
+              /></div>:(<></>)}
               <InputGroup variant="custom" colorScheme="purple">
                 <Input
                   onChange={typingHandler}
@@ -228,7 +249,7 @@ const SingleChat = () => {
                   color={"black"}
                 />
                 <InputRightElement
-                  // onClick={(event) => sendMessage(event)}
+                  onClick={(event) => sendMessage(event)}
                   cursor={"pointer"}
                 >
                   <i class="fa fa-paper-plane" aria-hidden="true"></i>
