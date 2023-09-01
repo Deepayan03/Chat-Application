@@ -4,6 +4,7 @@ const User = require("../models/userModel.js");
 
 const accessChat = async (req, res, next) => {
   const { userId } = req.body;
+  console.log(userId);
   if (!userId) {
     return next(new AppError("UserId param not sent", 400));
   }
@@ -42,6 +43,7 @@ const accessChat = async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return next(new AppError(error.message, 400));
   }
 };

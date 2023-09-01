@@ -10,7 +10,7 @@ import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider.js";
 import GroupChatModal from "./miscellaneous/GroupChatModal.jsx";
 
-const MyChats = ({ fetchAgain }) => {
+const MyChats = () => {
 
   const { selectedChat, setSelectedChat, user, chats, setChats,refresh,loggedUser, setLoggedUser} = ChatState();
 
@@ -25,8 +25,11 @@ const MyChats = ({ fetchAgain }) => {
       };
 
       const { data } = await axios.get("/api/chat", config);
+      console.log("Fetch Chats------")
+      console.log(data);
       setChats(data);
     } catch (error) {
+      console.log(error);
       toast({
         title: "Error Occured!",
         description: "Failed to Load the chats",
@@ -93,7 +96,8 @@ const MyChats = ({ fetchAgain }) => {
       >
         {chats ? (
           <Stack overflowY="hidden">
-            {chats.map((chat) => (
+            {chats.map((chat) => {
+              return(
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
@@ -104,13 +108,14 @@ const MyChats = ({ fetchAgain }) => {
                 borderRadius="lg"
                 key={chat._id}
               >
-                <Text key={chat}>
+                <Text key={chat._id}>
                   {!chat.isGroupChat
                     ? getSender(loggedUser, chat.users)
                     : chat.chatName}
                 </Text>
               </Box>
-            ))}
+              );
+          })}
           </Stack>
         ) : (
           <ChatLoading />

@@ -252,7 +252,7 @@ const SingleChat = () => {
                   onClick={(event) => sendMessage(event)}
                   cursor={"pointer"}
                 >
-                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                  <i className="fa fa-paper-plane" aria-hidden="true"></i>
                 </InputRightElement>
               </InputGroup>
             </FormControl>

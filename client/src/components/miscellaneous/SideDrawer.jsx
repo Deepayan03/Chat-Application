@@ -81,6 +81,7 @@ function SideDrawer() {
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
+      console.log(error);
       toast({
         title: "Error Occured!",
         description: "Failed to Load the Search Results",
@@ -89,11 +90,12 @@ function SideDrawer() {
         isClosable: true,
         position: "bottom-left",
       });
+      
     }
   };
 
   const accessChat = async (userId) => {
-    // console.log(userId);
+    console.log(userId);
     try {
       setLoadingChat(true);
       const config = {
@@ -103,16 +105,16 @@ function SideDrawer() {
         },
       };
       const { data } = await axios.post(`/api/chat`, { userId }, config);
-
+      const recieved= data.chats;
       if (!chats.find((c) => c._id === data._id)) {
         // console.log(data, ...chats);
-        setChats([data, ...chats])
+        setChats([...chats,recieved]);
       };
-      setSelectedChat(data);
+      setSelectedChat(recieved);
       // console.log("SearchResult---->"+searchResult[0].name);
       setLoadingChat(false);
-      setRefresh(!refresh);
       onClose();
+      setSearchResult([]);
     } catch (error) {
       toast({
         title: "Error fetching the chat",
@@ -122,6 +124,7 @@ function SideDrawer() {
         isClosable: true,
         position: "bottom-left",
       });
+      console.log(error);
     }
   };
 
@@ -193,15 +196,17 @@ function SideDrawer() {
             {loading ? (
               <ChatLoading />
             ) : (
-              searchResult?.map((res) => (
-                <UserListItem
-                  key={res._id}
-                  user={res}
-                  handleFunction={() => accessChat(res._id)}
-                />
-                
-              ))
-            )}
+              searchResult.map((res) => {
+                console.log(res);
+                return (
+                  <UserListItem
+                    key={res._id}
+                    user={res}
+                    handleFunction={() => accessChat(res._id)}
+                  />
+                );
+              }))
+            }
             {loadingChat && <Spinner ml="auto" display="flex" color="blue"/>}
           </DrawerBody>
         </DrawerContent>
