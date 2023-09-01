@@ -55,3 +55,16 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
 export const isSameUser=(messages,m,i)=>{
   return i>0 && messages[i-1].sender._id === m.sender._id;
 }
+
+export const checkIfSenderIsUser=(user,latestMessage)=>{
+  console.log("ChatLogic-------")
+  console.log(user._id);
+  console.log(latestMessage._id)
+  console.log("Object----")
+  console.log(latestMessage)
+  if(latestMessage._id === user._id){
+    return "You";
+  }
+
+  return latestMessage.name.split(" ")[0];
+}

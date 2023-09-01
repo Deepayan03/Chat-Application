@@ -2,17 +2,29 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useEffect } from "react";
-import { getSender } from "../config/ChatLogic.js";
+import { useEffect, useState } from "react";
+import {
+  checkIfSenderIsUser,
+  getSender,
+  getSenderFull,
+} from "../config/ChatLogic.js";
 import ChatLoading from "./ChatLoading";
 // import GroupChatModal from "./miscellaneous/GroupChatModal";
-import { Button } from "@chakra-ui/react";
+import { Avatar, Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider.js";
 import GroupChatModal from "./miscellaneous/GroupChatModal.jsx";
-
+import ScrollableFeed from "react-scrollable-feed";
 const MyChats = () => {
-
-  const { selectedChat, setSelectedChat, user, chats, setChats,refresh,loggedUser, setLoggedUser} = ChatState();
+  const {
+    selectedChat,
+    setSelectedChat,
+    user,
+    chats,
+    setChats,
+    refresh,
+    loggedUser,
+    setLoggedUser,
+  } = ChatState();
 
   const toast = useToast();
 
@@ -25,7 +37,7 @@ const MyChats = () => {
       };
 
       const { data } = await axios.get("/api/chat", config);
-      console.log("Fetch Chats------")
+      console.log("Fetch Chats------");
       console.log(data);
       setChats(data);
     } catch (error) {
@@ -40,9 +52,12 @@ const MyChats = () => {
       });
     }
   };
-
+  const truncateString = (str, maxWords) =>
+    str.split(" ").length > maxWords
+      ? str.split(" ").slice(0, maxWords).join(" ") + " ....."
+      : str;
   useEffect(() => {
-    const lg= JSON.parse(localStorage.getItem("userInfo"));
+    const lg = JSON.parse(localStorage.getItem("userInfo"));
     setLoggedUser(lg.data);
     fetchChats();
     // console.log("I am being fetched")
@@ -94,32 +109,61 @@ const MyChats = () => {
         borderRadius="lg"
         overflowY="scroll"
       >
-        {chats ? (
-          <Stack overflowY="hidden">
-            {chats.map((chat) => {
-              return(
-              <Box
-                onClick={() => setSelectedChat(chat)}
-                cursor="pointer"
-                bg={selectedChat === chat ? "deeppink" : "black"}
-                color={selectedChat === chat ? "black" : "white"}
-                px={3}
-                py={2}
-                borderRadius="lg"
-                key={chat._id}
-              >
-                <Text key={chat._id}>
-                  {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
-                    : chat.chatName}
-                </Text>
-              </Box>
-              );
-          })}
-          </Stack>
-        ) : (
-          <ChatLoading />
-        )}
+        <ScrollableFeed>
+          {chats ? (
+            <Stack overflowY="hidden">
+              {chats.map((chat) => {
+                console.log("Chats-----");
+                console.log(chat);
+                return (
+                  <Box
+                    onClick={() => setSelectedChat(chat)}
+                    cursor="pointer"
+                    bg={selectedChat === chat ? "deeppink" : "black"}
+                    color={selectedChat === chat ? "black" : "white"}
+                    px={5}
+                    py={4}
+                    borderRadius="lg"
+                    key={chat._id}
+                    display={"flex"}
+                    alignItems="center"
+                  >
+                    <Avatar
+                      src={getSenderFull(loggedUser, chat.users).avatar}
+                      name={chat.name}
+                      display={"flex"}
+                      mr={"15px"}
+                    ></Avatar>
+                    <Box display={"flex"} flexDirection="column">
+                      <Text key={chat._id} fontSize={"20px"}>
+                        {!chat.isGroupChat
+                          ? getSender(loggedUser, chat.users)
+                          : chat.chatName}
+                      </Text>
+                      <Text
+                        whiteSpace="nowrap" // Prevent text from wrapping
+                        overflow="hidden"
+                        textOverflow="ellipsis" // Show ellipsis when content overflows
+                        flexBasis="10%"
+                      >
+                        {chat.latestMessage &&
+                          `${checkIfSenderIsUser(
+                            loggedUser,
+                            chat.latestMessage.sender
+                          )} :  ${truncateString(
+                            chat.latestMessage.content,
+                            4
+                          )}`}
+                      </Text>
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Stack>
+          ) : (
+            <ChatLoading />
+          )}
+        </ScrollableFeed>
       </Box>
     </Box>
   );

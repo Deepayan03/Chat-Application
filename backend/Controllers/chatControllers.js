@@ -60,7 +60,7 @@ const fetchChats = async (req, res, next) => {
       .sort({ updatedAt: -1 });
     const results = await User.populate(result, {
       path: "latestMessage.sender",
-      select: "name,avatar,email",
+      select: "name avatar email",
     });
     // console.log(results)
 
