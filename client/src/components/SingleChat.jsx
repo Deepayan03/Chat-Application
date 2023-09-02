@@ -40,7 +40,9 @@ const SingleChat = () => {
     setSelectedChat,
     loggedUser,
     refresh,
-    setRefresh
+    setRefresh,
+    notification,
+    setNotification,
   } = ChatState();
 
   const defaultOptions={
@@ -137,16 +139,20 @@ const SingleChat = () => {
     // eslint-disable-next-line
   }, [selectedChat]);
 
-  
+  console.log(notification);  
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-       //Notify
+        if(!notification.includes(newMessageRecieved)){
+          setNotification([newMessageRecieved,...notification]);
+          setRefresh(!refresh);
+        }
       } else {
         setMessages([...messages, newMessageRecieved]);
+        setRefresh(!refresh);
       }
     });
   });

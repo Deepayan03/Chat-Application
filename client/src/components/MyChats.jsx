@@ -9,7 +9,6 @@ import {
   getSenderFull,
 } from "../config/ChatLogic.js";
 import ChatLoading from "./ChatLoading";
-// import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Avatar, Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider.js";
 import GroupChatModal from "./miscellaneous/GroupChatModal.jsx";
