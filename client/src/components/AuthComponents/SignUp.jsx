@@ -2,6 +2,7 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, V
 import React, { useState } from 'react'
 import axios from "axios"
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { ChatState } from '../../Context/ChatProvider'
 const SignUp = () => {
   const[show,setShow]=useState();
   const [name, setName] = useState();
@@ -10,6 +11,7 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState();
   const [avatar, setAvatar] = useState();
   const[loading,setLoading]=useState(false);
+  const {setUser}=ChatState();
   const handleClick=()=>{setShow(!show)};
   const toast=useToast();
   const history=useHistory();
@@ -80,20 +82,16 @@ const SignUp = () => {
       return;
     }
     try {
-      const config={
-        headers:{
-          "Content-type":"application/json"
-        },
-      };
-      const {data}=await axios.post("/api/user/",config,{name,email,password,avatar});
+      const {data}=await axios.post("/api/user/",{name,email,password,avatar});
       toast({
         title: "Registration Successful",
-        status:"warning",
+        status:"success",
         duration:5000,
         isClosable:true,
         position:'bottom',
       });
       localStorage.setItem("userInfo",JSON.stringify(data));
+      setUser(data);
       setLoading(false);
       history.push("/chats")
     } catch (error) {
@@ -105,6 +103,8 @@ const SignUp = () => {
         isClosable:true,
         position:'bottom',
       });
+      console.log(error)
+      setLoading(false);
     }
 
   }

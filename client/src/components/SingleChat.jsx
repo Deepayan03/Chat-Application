@@ -39,6 +39,8 @@ const SingleChat = () => {
     selectedChat,
     setSelectedChat,
     loggedUser,
+    refresh,
+    setRefresh
   } = ChatState();
 
   const defaultOptions={
@@ -104,6 +106,7 @@ const SingleChat = () => {
         // console.log(data);
         socket.emit("new message", data);
         setMessages([...messages, data]);
+        setRefresh(!refresh);
       } catch (error) {
         toast({
           title: "Error Occured",

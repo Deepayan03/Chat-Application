@@ -2,7 +2,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, } from "react";
 import {
   checkIfSenderIsUser,
   getSender,
@@ -37,9 +37,10 @@ const MyChats = () => {
       };
 
       const { data } = await axios.get("/api/chat", config);
-      console.log("Fetch Chats------");
-      console.log(data);
+      // console.log("Fetch Chats------");
+      // console.log(data);
       setChats(data);
+      setSelectedChat((prev)=>prev);
     } catch (error) {
       console.log(error);
       toast({
@@ -54,7 +55,7 @@ const MyChats = () => {
   };
   const truncateString = (str, maxWords) =>
     str.split(" ").length > maxWords
-      ? str.split(" ").slice(0, maxWords).join(" ") + " ....."
+      ? str.split(" ").slice(0, maxWords).join(" ") + "........"
       : str;
   useEffect(() => {
     const lg = JSON.parse(localStorage.getItem("userInfo"));
@@ -94,6 +95,7 @@ const MyChats = () => {
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
             rightIcon={<AddIcon />}
             bgColor={"deeppink"}
+            borderRadius={"30px"}
           >
             New Group Chat
           </Button>
@@ -107,23 +109,23 @@ const MyChats = () => {
         w="100%"
         h="100%"
         borderRadius="lg"
-        overflowY="scroll"
+        overflowY="hidden"
       >
         <ScrollableFeed>
           {chats ? (
             <Stack overflowY="hidden">
               {chats.map((chat) => {
-                console.log("Chats-----");
-                console.log(chat);
+                // console.log("Chats-----");
+                // console.log(chat);
                 return (
                   <Box
                     onClick={() => setSelectedChat(chat)}
                     cursor="pointer"
-                    bg={selectedChat === chat ? "deeppink" : "black"}
-                    color={selectedChat === chat ? "black" : "white"}
+                    bg={selectedChat && selectedChat._id === chat._id ? "deeppink" : "black"}
+                    color={selectedChat && selectedChat._id === chat._id ? "black" : "white"}
                     px={5}
                     py={4}
-                    borderRadius="lg"
+                    borderRadius="35px"
                     key={chat._id}
                     display={"flex"}
                     alignItems="center"

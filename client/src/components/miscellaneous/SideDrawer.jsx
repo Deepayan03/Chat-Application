@@ -95,7 +95,7 @@ function SideDrawer() {
   };
 
   const accessChat = async (userId) => {
-    console.log(userId);
+    // console.log(userId);
     try {
       setLoadingChat(true);
       const config = {
@@ -136,12 +136,12 @@ function SideDrawer() {
         alignItems="center"
         bg="black"
         w="100%"
-        p="5px 10px 5px 10px"
-        borderRadius={"20px"}
+        p="10px 10px 10px 10px"
+        borderRadius={"35px"}
         borderWidth="5px"
       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
-          <Button variant="ghost" bg={"yellow"} onClick={onOpen}>
+          <Button variant="ghost" bg={"yellow"} borderRadius={"30px"} onClick={onOpen}>
             <i className="fas fa-search"></i>
             <Text d={{ base: "none", md: "flex" }} px={4}>
               Search User
@@ -149,16 +149,16 @@ function SideDrawer() {
           </Button>
         </Tooltip>
         <Text fontSize="2xl" fontFamily="Work sans" color={"white"}>
-         SUPER-CHAT
+         CHIT CHAT
         </Text>
         <div>
           <Menu>
             <MenuButton p={1}>
-              <BellIcon fontSize="2xl" m={1} />
+              <BellIcon fontSize="2xl" m={1} color={"yellow"}  />
             </MenuButton>
            </Menu>
           <Menu>
-            <MenuButton as={Button} bg="yellow" rightIcon={<ChevronDownIcon />}>
+            <MenuButton as={Button} bg="yellow" rightIcon={<ChevronDownIcon />} borderRadius={"35px"}>
               {/* {console.log(user)} */}
               <Avatar
                 size="sm"
@@ -167,7 +167,7 @@ function SideDrawer() {
                 src={loggedUser.avatar}
               />
             </MenuButton>
-            <MenuList bg="yellow">
+            <MenuList bg="yellow" borderRadius={"15px"}>
               <ProfileModel user={loggedUser} bg="yellow">
                 <MenuItem bg="yellow">My Profile</MenuItem>{" "}
               </ProfileModel>

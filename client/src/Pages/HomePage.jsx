@@ -16,7 +16,7 @@ const HomePage = () => {
     return (
         <Container maxW="xl" centerContent>
             <Box
-                d="flex"
+                display="flex"
                 justifyContent="center"
                 p={3}
                 bg={"black"}
@@ -24,13 +24,14 @@ const HomePage = () => {
                 m="40px 0 15px 0"
                 borderRadius="20px"
                 borderWidth="1px"
+
             >
-                <Text color="white" fontSize="4xl" fontFamily="Work sans">Simply Chat</Text>
+                <Text color="white" fontSize="4xl" fontFamily="Work sans">CHIT CHAT</Text>
             </Box>
             <Box bg="black" w="100%" p={4} borderRadius="20px" color="deeppink" borderWidth="1px">
-                <Tabs variant='soft-rounded' >
-                    <TabList mb="1em">
-                        <Tab width="50%">Login</Tab>
+                <Tabs variant='soft-rounded' colorScheme="pink">
+                    <TabList mb="1em" >
+                        <Tab width="50%" >Login</Tab>
                         <Tab width="50%">Sign Up</Tab>
                     </TabList>
                     <TabPanels>

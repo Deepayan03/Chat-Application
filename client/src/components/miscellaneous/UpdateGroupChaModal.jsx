@@ -110,7 +110,7 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
         },
       };
       const res = await axios.put(
-        "/api/chat//group-remove",
+        "/api/chat/group-remove",
         {
           chatId: selectedChat._id,
           userId: userToBeRemoved._id,

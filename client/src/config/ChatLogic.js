@@ -57,11 +57,11 @@ export const isSameUser=(messages,m,i)=>{
 }
 
 export const checkIfSenderIsUser=(user,latestMessage)=>{
-  console.log("ChatLogic-------")
-  console.log(user._id);
-  console.log(latestMessage._id)
-  console.log("Object----")
-  console.log(latestMessage)
+  // console.log("ChatLogic-------")
+  // console.log(user._id);
+  // console.log(latestMessage._id)
+  // console.log("Object----")
+  // console.log(latestMessage)
   if(latestMessage._id === user._id){
     return "You";
   }
