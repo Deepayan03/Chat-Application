@@ -67,7 +67,6 @@ const MyChats = () => {
     // console.log("This is logged user"+loggedUser);
     // eslint-disable-next-line
   }, [refresh]);
-
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}

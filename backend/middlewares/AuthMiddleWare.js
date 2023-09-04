@@ -9,7 +9,6 @@ const UserAuth = async (req, res, next) => {
     ) {
       token = req.headers.authorization.split(" ")[1];
       // console.log(token);
-      // console.log(process.env.JWT_SECRET);
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.id).select("-password");
       return next();

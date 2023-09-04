@@ -120,6 +120,7 @@ const SingleChat = () => {
     }
   };
   useEffect(() => {
+    console.log(user.data);
     socket = io(ENDPOINT);
     socket.emit("setup", user.data);
     socket.on("connected", () => setSocketConnected(true));

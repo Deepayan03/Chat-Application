@@ -11,7 +11,7 @@ const Login = () => {
   const[loading,setLoading]=useState(false);
   const handleClick=()=>{setShow(!show)};
   const history=useHistory();
-  const {setRefresh,setLoggedUser,setUser}=ChatState();
+  const {setRefresh,setLoggedUser,setUser,setUserProfile}=ChatState();
   const submitHandler=async()=>{
     setLoading(true);
     if( !email || !password ){
@@ -39,6 +39,8 @@ const Login = () => {
       setLoading(false);
       setLoggedUser(data);
       setUser(data);
+      setUserProfile(data);
+      console.log(data);
       history.push("/chats")
     } catch (error) {
       toast({

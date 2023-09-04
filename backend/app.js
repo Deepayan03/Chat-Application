@@ -40,7 +40,9 @@ const server=app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-const io = require("socket.io")(server, {
+
+try{
+  const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
       origin: "http://localhost:3000",
@@ -79,5 +81,8 @@ const io = require("socket.io")(server, {
       socket.leave(userData._id);
     });
   });
+}catch(e){
+  console.log(error)
+}
 
 module.exports=app;

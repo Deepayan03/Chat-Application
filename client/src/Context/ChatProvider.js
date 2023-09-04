@@ -9,10 +9,12 @@ const ChatProvider = ({ children }) => {
   const [chats, setChats] = useState([]);
   const [loggedUser, setLoggedUser] = useState(0);
   const [notification,setNotification]=useState([]);
+  const [userProfile,setUserProfile]=useState();
   const history = useHistory();
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
+    setUserProfile(userInfo);
     if (!userInfo) {
       history.push("/");
     }
@@ -32,6 +34,8 @@ const ChatProvider = ({ children }) => {
         setLoggedUser,
         notification,
         setNotification,
+        userProfile,
+        setUserProfile
       }}
     >
       {children}

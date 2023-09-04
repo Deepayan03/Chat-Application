@@ -35,16 +35,16 @@ function SideDrawer() {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
-
+  const [profilePictureLoading, setProfilePictureLoading] = useState(false);
   const {
     setSelectedChat,
     user,
     chats,
     setChats,
-    loggedUser,
     notification,
     setNotification,
-    selectedChat,
+    userProfile,
+    setUserProfile,
   } = ChatState();
   const truncateString = (str, maxWords) =>
     str.split(" ").length > maxWords
@@ -53,14 +53,73 @@ function SideDrawer() {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
-
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
     sessionStorage.clear();
     setChats([]);
     history.push("/");
   };
-
+  const handleChangeAvatar = async (avatar) => {
+    if (!avatar) {
+      toast({
+        title: "Please upload a picture first",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
+    if (avatar.type === "image/jpeg" || avatar.type === "image/png") {
+      let data = new FormData();
+      console.log(avatar);
+      data.append("file", avatar);
+      data.append("upload_preset", "chat-app");
+      data.append("cloud_name", "dnymefrvq");
+      setProfilePictureLoading(true);
+      // const oldAvatarUrl = user.data.avatar;
+      // const publicId = oldAvatarUrl.split('/').pop().split('.')[0];
+      // console.log(publicId,user.data.avatar);
+      // const res = await axios.delete(
+      //   `https://api.cloudinary.com/v1_1/dnymefrvq/image/destroy/${publicId}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${process.env.cloudinarySecret}`,
+      //     },
+      //   }
+      // );
+        // console.log(res);
+      try {
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dnymefrvq/image/upload",
+          {
+            method: "post",
+            body: data,
+          }
+        );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        const res = await response.json();
+        console.log(res);
+        let id = user.data._id;
+        let url = res.url.toString();
+        const modifiedData = await axios.put("/api/user/", { id, url }, config);
+        const userData = modifiedData.data;
+        console.log(userData);
+        console.log("User----");
+        console.log(user);
+        setUserProfile(userData);
+        setProfilePictureLoading(false);
+        let existingData = JSON.parse(localStorage.getItem('userInfo'));
+        existingData.data.avatar=userData.data.avatar;
+        localStorage.setItem("userInfo", JSON.stringify(existingData));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
   const handleSearch = async () => {
     if (!search) {
       toast({
@@ -182,7 +241,7 @@ function SideDrawer() {
                   key={item._id}
                   onClick={() => {
                     setSelectedChat(item.chat);
-                    setNotification(notification.filter((n)=>n!==item))
+                    setNotification(notification.filter((n) => n !== item));
                   }}
                 >
                   {item.chat.isGroupChat
@@ -215,16 +274,22 @@ function SideDrawer() {
               borderRadius={"35px"}
               ml={"5"}
             >
-              {/* {console.log(user)} */}
+              {console.log(userProfile)}
               <Avatar
                 size="sm"
                 cursor="pointer"
-                name={loggedUser.name}
-                src={loggedUser.avatar}
+                name={userProfile.data.name || user.data.name}
+                src={userProfile.data.avatar || user.data.avatar}
               />
             </MenuButton>
             <MenuList bg="yellow" borderRadius={"15px"}>
-              <ProfileModel user={loggedUser} bg="yellow">
+              <ProfileModel
+                user={userProfile.data || user.data}
+                self={true}
+                changeAvatar={(avatar) => handleChangeAvatar(avatar)}
+                isLoading={profilePictureLoading}
+                bg="yellow"
+              >
                 <MenuItem bg="yellow">My Profile</MenuItem>{" "}
               </ProfileModel>
               <MenuDivider color={"black"} />

@@ -4,6 +4,7 @@ import {
   Button,
   IconButton,
   Image,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,13 +15,14 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
-
-const ProfileModel = ({ user, children }) => {
+import React, { useRef } from "react";
+const ProfileModel = ({ user, children, self, changeAvatar,isLoading }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const fileInputRef = useRef(null);
   // const {user}=ChatState();
+  console.log(user);
   return (
-    <>
+    user && ( <>
       {children ? (
         <span onClick={onOpen}>{children}</span>
       ) : (
@@ -60,6 +62,31 @@ const ProfileModel = ({ user, children }) => {
               src={user.avatar}
               alt={user.name}
             />
+            {self && (
+               <div>
+              <Input
+                display={"none"}
+                type="file"
+                p={1.5}
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={(e) => changeAvatar(e.target.files[0])}
+              >
+              </Input>
+               <Button variant={"ghost"} bgColor={"black"} color="white" _hover={{
+                color:"black",
+                background:"white"
+                
+               }} onClick={(e) => {
+                return fileInputRef.current.click();
+               }}
+               isLoading={isLoading}
+               >
+                Change Profile Picture
+               </Button>
+                </div>
+            )}
+           
             <Text fontSize={{ base: "28px", md: "30px" }}>{user.email}</Text>
           </ModalBody>
 
@@ -70,7 +97,7 @@ const ProfileModel = ({ user, children }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </>)
   );
 };
 

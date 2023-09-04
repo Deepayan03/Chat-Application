@@ -67,8 +67,22 @@ const allUsers = async (req, res, next) => {
     // console.log(users);
     res.send(users);
 }
+
+  const changeDp=async(req,res,next)=>{
+    const {id,url}=req.body;
+    console.log(id,url);
+    const user=await User.findById(id);
+    user.avatar=url;
+    await user.save();
+    res.status(200).json({
+      success:"true",
+      message:"Avatar changed successfully",
+      data:user
+    });
+  }
 module.exports= {
   register,
   login,
-  allUsers
+  allUsers,
+  changeDp
 }
