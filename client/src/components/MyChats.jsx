@@ -13,6 +13,8 @@ import { Avatar, Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider.js";
 import GroupChatModal from "./miscellaneous/GroupChatModal.jsx";
 import ScrollableFeed from "react-scrollable-feed";
+import { useRef } from 'react';
+
 const MyChats = () => {
   const {
     selectedChat,
@@ -26,7 +28,7 @@ const MyChats = () => {
   } = ChatState();
 
   const toast = useToast();
-
+  const chatContainerRef = useRef(null);
   const fetchChats = async () => {
     try {
       const config = {
@@ -40,6 +42,7 @@ const MyChats = () => {
       // console.log(data);
       setChats(data);
       setSelectedChat((prev)=>prev);
+      chatContainerRef.current.lastElementChild.scrollIntoView();
     } catch (error) {
       console.log(error);
       toast({
@@ -109,8 +112,9 @@ const MyChats = () => {
         h="100%"
         borderRadius="lg"
         overflowY="hidden"
+        ref={chatContainerRef}
       >
-        <ScrollableFeed>
+        <ScrollableFeed  >
           {chats ? (
             <Stack overflowY="hidden">
               {chats.map((chat) => {

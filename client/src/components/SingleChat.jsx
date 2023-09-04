@@ -17,21 +17,20 @@ import { getSender, getSenderFull } from "../config/ChatLogic";
 import ProfileModel from "./miscellaneous/profileModel";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChaModal";
 import axios from "axios";
-import "./style.css"
+import "./style.css";
 import ScrollableChat from "./ScrollableChat";
-import io from "socket.io-client"
-import Lottie from "react-lottie"
-import animationData from "../assets/animation_llzlhaex.json"
-const ENDPOINT="http://127.0.0.1:5001";
+import io from "socket.io-client";
+import Lottie from "react-lottie";
+import animationData from "../assets/animation_llzlhaex.json";
+const ENDPOINT = "http://127.0.0.1:5001";
 
-
-let socket,selectedChatCompare;
+let socket, selectedChatCompare;
 
 const SingleChat = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
-  const [socketConnected,setSocketConnected]=useState(false);
+  const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const {
@@ -44,15 +43,14 @@ const SingleChat = () => {
     notification,
     setNotification,
   } = ChatState();
-
-  const defaultOptions={
-    loop:true,
-    autoplay:true,
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
     animationData: animationData,
-    rendererSettings:{
-      preserveAspectRatio:"XMidYMid slice"
-    }
-  }
+    rendererSettings: {
+      preserveAspectRatio: "XMidYMid slice",
+    },
+  };
   const toast = useToast();
   const fetchMessages = async () => {
     if (!selectedChat) {
@@ -88,7 +86,7 @@ const SingleChat = () => {
   };
   const sendMessage = async (event) => {
     if ((event.type === "click" || event.key === "Enter") && newMessage) {
-      socket.emit("stop typing",selectedChat._id);
+      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -125,11 +123,10 @@ const SingleChat = () => {
     socket = io(ENDPOINT);
     socket.emit("setup", user.data);
     socket.on("connected", () => setSocketConnected(true));
-    socket.on("typing",()=>setIsTyping(true));
-    socket.on("stop typing",()=>setIsTyping(false));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
     // eslint-disable-next-line
   }, []);
-
 
   useEffect(() => {
     setLoading(true);
@@ -139,7 +136,7 @@ const SingleChat = () => {
     // eslint-disable-next-line
   }, [selectedChat]);
 
-  console.log(notification);  
+  // console.log(notification);
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
@@ -156,30 +153,28 @@ const SingleChat = () => {
       }
     });
   });
-  
-
   const typingHandler = (e) => {
     console.log(selectedChat);
     setNewMessage(e.target.value);
     //Typing indicator logic
-    if(!socketConnected){
-      return ;
+    if (!socketConnected) {
+      return;
     }
-    if(!typing){
+    if (!typing) {
       setTyping(true);
-      socket.emit("typing",selectedChat._id)
+      socket.emit("typing", selectedChat._id);
     }
-    let lastTypingTime=new Date().getTime();
-    let timerLength=3000;
-    setTimeout(()=>{
-      var timeNow=new Date().getTime();
-      var timeDiff=timeNow-lastTypingTime;
-      if(timeDiff>=timerLength && typing){
-        socket.emit("stop typing",selectedChat._id);
+    let lastTypingTime = new Date().getTime();
+    let timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
         setTyping(false);
       }
-    },timerLength)
-    };
+    }, timerLength);
+  };
   return (
     <>
       {selectedChat ? (
@@ -214,7 +209,7 @@ const SingleChat = () => {
             ) : (
               <>
                 {selectedChat.chatName.toUpperCase()}
-                <UpdateGroupChatModal  fetchMessages={fetchMessages} />
+                <UpdateGroupChatModal fetchMessages={fetchMessages} />
               </>
             )}
           </Text>
@@ -238,16 +233,26 @@ const SingleChat = () => {
                 margin={"auto"}
               />
             ) : (
-              <>{ <div className="messages">
-                <ScrollableChat messages={messages}/>
-              </div> }</>
+              <>
+                {
+                  <div className="messages">
+                    <ScrollableChat messages={messages} />
+                  </div>
+                }
+              </>
             )}
             <FormControl onKeyDown={(event) => sendMessage(event)}>
-              {!typing && isTyping?<div><Lottie
-                options={defaultOptions}
-                width={70}
-                style={{marginBottom:15,marginLeft:0}}
-              /></div>:(<></>)}
+              {!typing && isTyping ? (
+                <div>
+                  <Lottie
+                    options={defaultOptions}
+                    width={70}
+                    style={{ marginBottom: 15, marginLeft: 0 }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               <InputGroup variant="custom" colorScheme="purple">
                 <Input
                   onChange={typingHandler}
@@ -285,4 +290,3 @@ const SingleChat = () => {
 };
 
 export default SingleChat;
- 

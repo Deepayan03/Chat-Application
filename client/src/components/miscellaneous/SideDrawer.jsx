@@ -44,8 +44,12 @@ function SideDrawer() {
     loggedUser,
     notification,
     setNotification,
+    selectedChat,
   } = ChatState();
-
+  const truncateString = (str, maxWords) =>
+    str.split(" ").length > maxWords
+      ? str.split(" ").slice(0, maxWords).join(" ") + "........"
+      : str;
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
@@ -159,31 +163,51 @@ function SideDrawer() {
         <div>
           <Menu>
             <MenuButton p={1}>
-              <BellIcon fontSize="2xl"  m={0} color={"yellow"} />
-              {notification.length&&<Badge
-                position="absolute"
-                colorScheme="red"
-                borderRadius="50%"
-                ml={0}
-              >
-                {notification.length}
-              </Badge>}
+              <BellIcon fontSize="2xl" m={0} color={"yellow"} />
+              {notification.length && (
+                <Badge
+                  position="absolute"
+                  colorScheme="red"
+                  borderRadius="50%"
+                  ml={0}
+                >
+                  {notification.length}
+                </Badge>
+              )}
             </MenuButton>
             <MenuList pl={2}>
               {!notification.length && "No new messages"}
               {notification.map((item) => (
-                <MenuItem key={item._id}>
+                <MenuItem
+                  key={item._id}
+                  onClick={() => {
+                    setSelectedChat(item.chat);
+                    setNotification(notification.filter((n)=>n!==item))
+                  }}
+                >
                   {item.chat.isGroupChat
-                    ? `New message from ${item.chat.chatName}`
-                    : `New message from ${getSender(user, item.chat.users)}`}
+                    ? ` ${item.chat.chatName}`
+                    : `${
+                        getSender(user, item.chat.users)?.split(" ")[0]
+                      }: \n ${truncateString(item.content, 3)}`}
                 </MenuItem>
               ))}
-              {notification.length>0 && <MenuItem display={"flex"} alignItems={"flex-start"}>
-              {notification.length>0 && <Button height={"auto"} width={"auto"}  onClick={()=>setNotification([])}>Clear All</Button>}
-             </MenuItem>}
+              {notification.length > 0 && (
+                <MenuItem display={"flex"} alignItems={"flex-start"}>
+                  {notification.length > 0 && (
+                    <Button
+                      height={"auto"}
+                      width={"auto"}
+                      onClick={() => setNotification([])}
+                    >
+                      Clear All
+                    </Button>
+                  )}
+                </MenuItem>
+              )}
             </MenuList>
           </Menu>
-          <Menu >
+          <Menu>
             <MenuButton
               as={Button}
               bg="yellow"
