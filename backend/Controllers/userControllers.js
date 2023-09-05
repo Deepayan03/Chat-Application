@@ -1,6 +1,7 @@
 const generateToken = require("../config/generateToken.js");
 const User = require("../models/userModel.js");
 const AppError = require("../utils/utilError.js");
+const cloudinary= require("cloudinary").v2;
 const register = async (req, res, next) => {
   const { name, email, password, avatar } = req.body;
   if (!name || !email || !password) {
@@ -69,8 +70,21 @@ const allUsers = async (req, res, next) => {
 }
 
   const changeDp=async(req,res,next)=>{
-    const {id,url}=req.body;
-    console.log(id,url);
+    try
+    {const {id,url,OldpublicId}=req.body;
+    cloudinary.config({
+      cloud_name: process.env.cloudName,
+      api_key: process.env.cloudinaryAPIKey,
+      api_secret: process.env.cloudinarySecret,
+    });
+    cloudinary.uploader.destroy(OldpublicId, (error, result) => {
+      if (error) {
+        console.error('Error deleting image:', error);
+      } else {
+        console.log('Image deleted successfully:', result);
+      }
+    });
+    console.log(id,url,OldpublicId);
     const user=await User.findById(id);
     user.avatar=url;
     await user.save();
@@ -78,7 +92,10 @@ const allUsers = async (req, res, next) => {
       success:"true",
       message:"Avatar changed successfully",
       data:user
-    });
+    });}catch(error){
+      console.log(error);
+      return next(new AppError(error.message,400));
+    }
   }
 module.exports= {
   register,

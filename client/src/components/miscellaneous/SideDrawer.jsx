@@ -76,18 +76,9 @@ function SideDrawer() {
       data.append("upload_preset", "chat-app");
       data.append("cloud_name", "dnymefrvq");
       setProfilePictureLoading(true);
-      // const oldAvatarUrl = user.data.avatar;
-      // const publicId = oldAvatarUrl.split('/').pop().split('.')[0];
-      // console.log(publicId,user.data.avatar);
-      // const res = await axios.delete(
-      //   `https://api.cloudinary.com/v1_1/dnymefrvq/image/destroy/${publicId}`,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${process.env.cloudinarySecret}`,
-      //     },
-      //   }
-      // );
-        // console.log(res);
+      let oldAvatarUrl = userProfile.data.avatar;
+      let OldpublicId = oldAvatarUrl.split('/').pop().split('.')[0];
+      console.log(OldpublicId);
       try {
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/dnymefrvq/image/upload",
@@ -105,18 +96,23 @@ function SideDrawer() {
         console.log(res);
         let id = user.data._id;
         let url = res.url.toString();
-        const modifiedData = await axios.put("/api/user/", { id, url }, config);
+        const modifiedData = await axios.put("/api/user/", { id, url , OldpublicId }, config);
         const userData = modifiedData.data;
-        console.log(userData);
-        console.log("User----");
-        console.log(user);
         setUserProfile(userData);
         setProfilePictureLoading(false);
         let existingData = JSON.parse(localStorage.getItem('userInfo'));
         existingData.data.avatar=userData.data.avatar;
         localStorage.setItem("userInfo", JSON.stringify(existingData));
+        toast({
+          title: "Profile picture updated successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-right",
+        });
       } catch (e) {
         console.log(e);
+        setProfilePictureLoading(false);
       }
     }
   };
