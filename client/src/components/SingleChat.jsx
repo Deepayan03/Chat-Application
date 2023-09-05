@@ -187,6 +187,7 @@ const SingleChat = () => {
             w="100%"
             fontFamily={"Work sans"}
             display={"flex"}
+            color={"white"}
             justifyContent={{ base: "space-between" }}
           >
             <IconButton
@@ -260,7 +261,7 @@ const SingleChat = () => {
                   value={newMessage}
                   placeholder="Enter a Message"
                   borderRadius={"20px"}
-                  bgColor={"yellow"}
+                  bgColor={"white"}
                   color={"black"}
                 />
                 <InputRightElement

@@ -20,17 +20,17 @@ import { Tooltip } from "@chakra-ui/tooltip";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
 import { useHistory } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import ChatLoading from "../ChatLoading";
 import { Spinner } from "@chakra-ui/spinner";
-import ProfileModel from "../miscellaneous/profileModel.jsx";
 import { ChatState } from "../../Context/ChatProvider";
 import UserListItem from "../UserAvatars/UserListItem.jsx";
 import { getSender } from "../../config/ChatLogic";
-import { Badge } from "@chakra-ui/react";
-function SideDrawer() {
+import { Badge, useBreakpointValue } from "@chakra-ui/react";
+import UserProfile from "./UserProfile";
+function SideDrawer({setSingleChatActive,singleChatActive}) {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,9 @@ function SideDrawer() {
     setNotification,
     userProfile,
     setUserProfile,
+    selectedChat
   } = ChatState();
+  const displayValue = useBreakpointValue({ lg: "block", md: "none" });
   const truncateString = (str, maxWords) =>
     str.split(" ").length > maxWords
       ? str.split(" ").slice(0, maxWords).join(" ") + "........"
@@ -57,6 +59,7 @@ function SideDrawer() {
     localStorage.removeItem("userInfo");
     sessionStorage.clear();
     setChats([]);
+    setSelectedChat("");
     history.push("/");
   };
   const handleChangeAvatar = async (avatar) => {
@@ -187,8 +190,19 @@ function SideDrawer() {
     }
   };
 
+  useEffect(() => {
+    // When SingleChat component is active
+    if (selectedChat &&  window.screen.width < 450) {
+      setSingleChatActive(true);
+     
+    } else {
+      setSingleChatActive(false);
+      console.log(window.screen.width)
+    }
+  }, [selectedChat]);
   return (
-    <>
+    <Box
+    style={{display: singleChatActive ? 'none' : 'block'}}>
       <Box
         display="flex"
         justifyContent="space-between"
@@ -202,12 +216,12 @@ function SideDrawer() {
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button
             variant="ghost"
-            bg={"yellow"}
+            bg={"gray.400"}
             borderRadius={"30px"}
             onClick={onOpen}
           >
             <i className="fas fa-search"></i>
-            <Text d={{ base: "none", md: "flex" }} px={4}>
+            <Text display={{ base: "none", md: "flex" }} px={4}>
               Search User
             </Text>
           </Button>
@@ -218,7 +232,7 @@ function SideDrawer() {
         <div>
           <Menu>
             <MenuButton p={1}>
-              <BellIcon fontSize="2xl" m={0} color={"yellow"} />
+              <BellIcon fontSize="2xl" m={0} color={"blue.50"} />
               {notification.length && (
                 <Badge
                   position="absolute"
@@ -265,7 +279,7 @@ function SideDrawer() {
           <Menu>
             <MenuButton
               as={Button}
-              bg="yellow"
+              bg="blue.100"
               rightIcon={<ChevronDownIcon />}
               borderRadius={"35px"}
               ml={"5"}
@@ -278,18 +292,17 @@ function SideDrawer() {
                 src={userProfile.data.avatar || user.data.avatar}
               />
             </MenuButton>
-            <MenuList bg="yellow" borderRadius={"15px"}>
-              <ProfileModel
-                user={userProfile.data || user.data}
-                self={true}
-                changeAvatar={(avatar) => handleChangeAvatar(avatar)}
-                isLoading={profilePictureLoading}
-                bg="yellow"
+            <MenuList bg="gray.300" borderRadius={"15px"}>
+              <UserProfile
+              user={userProfile.data || user.data}
+              changeAvatar={(avatar) => handleChangeAvatar(avatar)}
+              isLoading={profilePictureLoading}
               >
-                <MenuItem bg="yellow">My Profile</MenuItem>{" "}
-              </ProfileModel>
+                <MenuItem bg="gray.300">My Profile</MenuItem>{" "}
+                </UserProfile>
+              {/* </ProfileModel> */}
               <MenuDivider color={"black"} />
-              <MenuItem bg="yellow" onClick={logoutHandler}>
+              <MenuItem bg="gray.300" onClick={logoutHandler}>
                 Logout
               </MenuItem>
             </MenuList>
@@ -317,7 +330,7 @@ function SideDrawer() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button bgColor="yellow" onClick={handleSearch}>
+              <Button bgColor="blue.800" onClick={handleSearch} color={"white"}>
                 Search
               </Button>
             </Box>
@@ -339,7 +352,7 @@ function SideDrawer() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </>
+    </Box>
   );
 }
 

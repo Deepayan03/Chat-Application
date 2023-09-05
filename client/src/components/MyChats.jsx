@@ -14,6 +14,7 @@ import { ChatState } from "../Context/ChatProvider.js";
 import GroupChatModal from "./miscellaneous/GroupChatModal.jsx";
 import ScrollableFeed from "react-scrollable-feed";
 import { useRef } from 'react';
+import SideDrawer from "./miscellaneous/SideDrawer.jsx";
 
 const MyChats = () => {
   const {
@@ -68,12 +69,13 @@ const MyChats = () => {
     // eslint-disable-next-line
   }, [refresh]);
   return (
+    <>
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
       alignItems="center"
       p={3}
-      bg="black"
+      bg="gray.600"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
@@ -82,7 +84,7 @@ const MyChats = () => {
         pb={3}
         px={3}
         fontSize={{ base: "28px", md: "30px" }}
-        fontFamily="Work sans"
+        // font-family= {"Poppins, sans-serif"}
         display="flex"
         w="100%"
         justifyContent="space-between"
@@ -106,7 +108,7 @@ const MyChats = () => {
         display="flex"
         flexDir="column"
         p={3}
-        bgColor={"greenyellow"}
+        bgColor={"blue.200"}
         w="100%"
         h="100%"
         borderRadius="lg"
@@ -117,13 +119,11 @@ const MyChats = () => {
           {chats ? (
             <Stack overflowY="hidden">
               {chats.map((chat) => {
-                // console.log("Chats-----");
-                // console.log(chat);
                 return (
                   <Box
                     onClick={() => setSelectedChat(chat)}
                     cursor="pointer"
-                    bg={selectedChat && selectedChat._id === chat._id ? "deeppink" : "black"}
+                    bg={selectedChat && selectedChat._id === chat._id ? "blue.500" : "blue.900"}
                     color={selectedChat && selectedChat._id === chat._id ? "black" : "white"}
                     px={5}
                     py={4}
@@ -131,6 +131,7 @@ const MyChats = () => {
                     key={chat._id}
                     display={"flex"}
                     alignItems="center"
+                    font-family= {"Poppins, sans-serif"}
                   >
                     <Avatar
                       src={getSenderFull(loggedUser, chat.users).avatar}
@@ -138,7 +139,7 @@ const MyChats = () => {
                       display={"flex"}
                       mr={"15px"}
                     ></Avatar>
-                    <Box display={"flex"} flexDirection="column">
+                    <Box display={"flex"} flexDirection="column" font-family= {"Poppins, sans-serif"}>
                       <Text key={chat._id} fontSize={"20px"}>
                         {!chat.isGroupChat
                           ? getSender(loggedUser, chat.users)
@@ -170,6 +171,7 @@ const MyChats = () => {
         </ScrollableFeed>
       </Box>
     </Box>
+    </>
   );
 };
 
