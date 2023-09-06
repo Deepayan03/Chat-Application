@@ -28,7 +28,7 @@ import { Spinner } from "@chakra-ui/spinner";
 import { ChatState } from "../../Context/ChatProvider";
 import UserListItem from "../UserAvatars/UserListItem.jsx";
 import { getSender } from "../../config/ChatLogic";
-import { Badge, useBreakpointValue } from "@chakra-ui/react";
+import { Badge, } from "@chakra-ui/react";
 import UserProfile from "./UserProfile";
 function SideDrawer({setSingleChatActive,singleChatActive}) {
   const [search, setSearch] = useState("");
@@ -47,7 +47,7 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
     setUserProfile,
     selectedChat
   } = ChatState();
-  const displayValue = useBreakpointValue({ lg: "block", md: "none" });
+
   const truncateString = (str, maxWords) =>
     str.split(" ").length > maxWords
       ? str.split(" ").slice(0, maxWords).join(" ") + "........"
@@ -74,14 +74,14 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
     }
     if (avatar.type === "image/jpeg" || avatar.type === "image/png") {
       let data = new FormData();
-      console.log(avatar);
+      // console.log(avatar);
       data.append("file", avatar);
       data.append("upload_preset", "chat-app");
       data.append("cloud_name", "dnymefrvq");
       setProfilePictureLoading(true);
       let oldAvatarUrl = userProfile.data.avatar;
       let OldpublicId = oldAvatarUrl.split('/').pop().split('.')[0];
-      console.log(OldpublicId);
+      // console.log(OldpublicId);
       try {
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/dnymefrvq/image/upload",
@@ -96,7 +96,7 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
           },
         };
         const res = await response.json();
-        console.log(res);
+        // console.log(res);
         let id = user.data._id;
         let url = res.url.toString();
         const modifiedData = await axios.put("/api/user/", { id, url , OldpublicId }, config);
@@ -197,8 +197,9 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
      
     } else {
       setSingleChatActive(false);
-      console.log(window.screen.width)
+      // console.log(window.screen.width)
     }
+    //eslint-disable-next-line
   }, [selectedChat]);
   return (
     <Box
@@ -209,9 +210,10 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
         alignItems="center"
         bg="black"
         w="100%"
-        p="10px 10px 10px 10px"
+        p="7px"
         borderRadius={"35px"}
         borderWidth="5px"
+        mb={0}
       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button
@@ -284,7 +286,7 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
               borderRadius={"35px"}
               ml={"5"}
             >
-              {console.log(userProfile)}
+              {/* {console.log(userProfile)} */}
               <Avatar
                 size="sm"
                 cursor="pointer"
@@ -338,7 +340,7 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
               <ChatLoading />
             ) : (
               searchResult.map((res) => {
-                console.log(res);
+                // console.log(res);
                 return (
                   <UserListItem
                     key={res._id}

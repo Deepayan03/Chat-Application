@@ -16,8 +16,6 @@ import {
 } from "@chakra-ui/react";
 const ProfileModel = ({ user, children}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const {user}=ChatState();
-  console.log(user);
   return (
     user && ( <>
       {children ? (

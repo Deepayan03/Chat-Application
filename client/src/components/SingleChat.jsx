@@ -120,7 +120,7 @@ const SingleChat = () => {
     }
   };
   useEffect(() => {
-    console.log(user.data);
+    // console.log(user.data);
     socket = io(ENDPOINT);
     socket.emit("setup", user.data);
     socket.on("connected", () => setSocketConnected(true));
@@ -155,7 +155,7 @@ const SingleChat = () => {
     });
   });
   const typingHandler = (e) => {
-    console.log(selectedChat);
+    // console.log(selectedChat);
     setNewMessage(e.target.value);
     //Typing indicator logic
     if (!socketConnected) {
@@ -181,9 +181,9 @@ const SingleChat = () => {
       {selectedChat ? (
         <>
           <Text
-            fontSize={{ base: "28px", md: "30px" }}
-            pb={3}
-            px={2}
+            fontSize={{ base: "21px", md: "30px" }}
+            pb={{ base: "1", md: "3" }}
+            px={{ base: "1", md: "3" }}
             w="100%"
             fontFamily={"Work sans"}
             display={"flex"}
@@ -225,6 +225,7 @@ const SingleChat = () => {
             h={"100%"}
             borderRadius={"lg"}
             overflowY={"hidden"}
+            pos={"relative"}
           >
             {loading ? (
               <Spinner

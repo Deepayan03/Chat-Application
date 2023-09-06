@@ -307,4 +307,4 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
   );
 };
 
-export default UpdateGroupChatModal;
+export  default UpdateGroupChatModal;

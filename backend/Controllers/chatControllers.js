@@ -1,6 +1,7 @@
 const AppError = require("../utils/utilError.js");
 const Chat = require("../models/chatModel.js");
 const User = require("../models/userModel.js");
+const Message = require("../models/messageModel.js");
 
 const accessChat = async (req, res, next) => {
   const { userId } = req.body;
@@ -180,6 +181,23 @@ const remove = async (req, res, next) => {
     return next(new AppError(e.message, 400));
   }
 };
+
+const deleteChats=async(req,res,next)=>{
+  try{
+    const chatId=req.query.chatId;
+    const query={chat: chatId};
+    await Message.deleteMany(query);
+    const deletedChat=await Chat.findByIdAndDelete(chatId);
+    return res.status(200).json({
+      success:true,
+      message:"Chat deleted successfully",
+      deletedChat : deletedChat
+    });
+  }catch(e){
+    console.log(e);
+    return next(new AppError(e.message,400));
+  }
+}
 module.exports = {
   accessChat,
   fetchChats,
@@ -187,4 +205,5 @@ module.exports = {
   renameGroup,
   addToGroup,
   remove,
+  deleteChats
 };
