@@ -47,10 +47,12 @@ const server=app.listen(PORT, () => {
       // credentials: true,
     },
   });
-  
+  const onlineUsers = {}; 
   io.on("connection", (socket) => {
     console.log("Connected to socket.io");
     socket.on("setup", (userData) => {
+      onlineUsers[userData._id] = true;
+      io.emit("online users", Object.keys(onlineUsers));
       socket.join(userData._id);
       socket.emit("connected");
     });
@@ -73,6 +75,7 @@ const server=app.listen(PORT, () => {
         socket.in(user._id).emit("message recieved", newMessageRecieved);
       });
     });
+
   
     socket.off("setup", () => {
       console.log("USER DISCONNECTED");

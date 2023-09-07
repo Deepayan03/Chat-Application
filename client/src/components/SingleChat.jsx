@@ -33,6 +33,7 @@ const SingleChat = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const {
     user,
     selectedChat,
@@ -126,6 +127,9 @@ const SingleChat = () => {
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+    socket.on("online users", (onlineUsers) => {
+      setOnlineUsers(onlineUsers);
+    });
     // eslint-disable-next-line
   }, []);
 
@@ -144,8 +148,8 @@ const SingleChat = () => {
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-        if(!notification.includes(newMessageRecieved)){
-          setNotification([newMessageRecieved,...notification]);
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
           setRefresh(!refresh);
         }
       } else {
@@ -197,7 +201,14 @@ const SingleChat = () => {
             />
             {!selectedChat.isGroupChat ? (
               <>
+              <div style={{display:"flex",flexDirection:"column"}}>
                 {getSender(loggedUser, selectedChat.users)}
+                {onlineUsers.includes(
+                  getSenderFull(loggedUser, selectedChat.users)._id
+                ) ? (
+                  <span style={{ color: "red",fontSize:"20px",marginLeft:"25px",padding:"0px"}}>Online</span>
+                ) : null}
+                </div>
                 <ProfileModel
                   user={getSenderFull(loggedUser, selectedChat.users)}
                 >
@@ -207,6 +218,7 @@ const SingleChat = () => {
                     cursor={"pointer"}
                   ></Avatar>
                 </ProfileModel>
+                {console.log(onlineUsers)}
               </>
             ) : (
               <>
