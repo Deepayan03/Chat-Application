@@ -5,10 +5,19 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 ## Features
 
 - User Registration and Authentication
-- Create and Join Chat Rooms
+- Search , Create and Join Chat Rooms
 - Real-time Messaging
 - User Online/Offline Status
 - Typing Indicators
+- Creation or group chats
+- Changing of profile pictures
+- Emoji Support
+
+## Future Enhancements
+- Read Recipents
+- Multiple group admins and more control over the group roles
+- Image support
+- More control over updation of User details.
 
 ## Technologies Used
 
@@ -17,7 +26,7 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 - React.js: A JavaScript library for building the user interface.
 - Node.js: A runtime environment for executing JavaScript on the server.
 - Socket.io: A library for enabling real-time, bidirectional communication between clients and the server.
-
+- Cloudinary: For storing storing images
 ## Setup
 
 1. Clone the repository:
@@ -42,7 +51,7 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 5. Install dependencies for the client:
      ```bash
      cd client
-    npm install
+     npm install
 6. Start the client:
     ```bash
     Copy code
@@ -57,4 +66,9 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
     See typing indicators when other users are typing.
 
 9. Contributing
-    Contributions are welcome! 
+    Contributions are welcome!
+## My message
+   If you are viewing this repository then my message to you is that if you find any bugs/errors/potential threats please feel free to reachout and inform me about that :
+   My name: Deepayan Mukhopadhyay 
+   My email: mukhopadhyaydeepayan@gmail.com
+   Thank you and If you liked my work then please please do drop a star.It matters a lot to me.
