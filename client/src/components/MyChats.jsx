@@ -221,12 +221,18 @@ const MyChats = () => {
                           flexGrow: 1,
                         }}
                       >
-                        <Avatar
+                         {chat.isGroupChat && <Avatar
+                          src={chat.avatar && chat.avatar}
+                          name={chat.name}
+                          display={"flex"}
+                          mr={"15px"}
+                        ></Avatar>}
+                       { !chat.isGroupChat && <Avatar
                           src={getSenderFull(loggedUser, chat.users).avatar}
                           name={chat.name}
                           display={"flex"}
                           mr={"15px"}
-                        ></Avatar>
+                        ></Avatar>}
                         <Box
                           display={"flex"}
                           flexDirection="column"

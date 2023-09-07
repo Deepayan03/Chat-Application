@@ -15,13 +15,14 @@ import {
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender, getSenderFull } from "../config/ChatLogic";
 import ProfileModel from "./miscellaneous/profileModel";
-import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChaModal";
+// import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChaModal";
 import axios from "axios";
 import "./style.css";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 import Lottie from "react-lottie";
 import animationData from "../assets/animation_llzlhaex.json";
+import GroupInfo from "./miscellaneous/GroupInfo";
 const ENDPOINT = "http://127.0.0.1:5001";
 
 let socket, selectedChatCompare;
@@ -223,7 +224,8 @@ const SingleChat = () => {
             ) : (
               <>
                 {selectedChat.chatName.toUpperCase()}
-                <UpdateGroupChatModal fetchMessages={fetchMessages} />
+                {/* <UpdateGroupChatModal fetchMessages={fetchMessages} /> */}
+                <GroupInfo fetchMessages={fetchMessages}/>
               </>
             )}
           </Text>

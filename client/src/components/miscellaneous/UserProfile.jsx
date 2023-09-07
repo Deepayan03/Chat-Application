@@ -23,7 +23,7 @@ const UserProfile = ({ children,user,changeAvatar,isLoading }) => {
         placement={"right"}
         onClose={onClose}
         isOpen={isOpen}
-        size={{ md: "full", lg: "md" }}
+        size={{ md: "full", lg: "sm" }}
       >
         <DrawerOverlay />
         <DrawerContent>

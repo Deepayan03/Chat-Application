@@ -1,9 +1,8 @@
-import { ViewIcon } from "@chakra-ui/icons";
+
 import {
   Box,
   Button,
   FormControl,
-  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -21,7 +20,7 @@ import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../UserAvatars/UserBadgeItem";
 import axios from "axios";
 import UserListItem from "../UserAvatars/UserListItem";
-const UpdateGroupChatModal = ({fetchMessages}) => {
+const UpdateGroupChatModal = ({fetchMessages,children}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
@@ -232,11 +231,9 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
   };
   return (
     <>
-      <IconButton
-        display={{ base: "flex" }}
-        icon={<ViewIcon />}
-        onClick={onOpen}
-      />
+      {children ? (
+        <span onClick={onOpen}>{children}</span>
+      ):(<></>) }
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

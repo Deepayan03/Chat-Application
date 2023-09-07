@@ -127,12 +127,13 @@ const renameGroup = async (req, res, next) => {
 };
 
 const addToGroup = async (req, res, next) => {
-  const { chatId, userId } = req.body;
+  const { chatId, userIds } = req.body;
+  console.log(userIds)
   try {
     const added = await Chat.findByIdAndUpdate(
       chatId,
       {
-        $push: { users: userId },
+        $push: { users: { $each: userIds } },
       },
       {
         new: true,
@@ -150,7 +151,7 @@ const addToGroup = async (req, res, next) => {
       });
     }
   } catch (error) {
-    return next(new AppError(e.message, 400));
+    return next(new AppError(error.message, 400));
   }
 };
 
@@ -198,6 +199,10 @@ const deleteChats=async(req,res,next)=>{
     return next(new AppError(e.message,400));
   }
 }
+
+const changeGroupChatAvatar=async(req,res,next)=>{
+  
+}
 module.exports = {
   accessChat,
   fetchChats,
@@ -205,5 +210,6 @@ module.exports = {
   renameGroup,
   addToGroup,
   remove,
-  deleteChats
+  deleteChats,
+  changeGroupChatAvatar
 };
