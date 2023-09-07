@@ -26,7 +26,8 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 - React.js: A JavaScript library for building the user interface.
 - Node.js: A runtime environment for executing JavaScript on the server.
 - Socket.io: A library for enabling real-time, bidirectional communication between clients and the server.
-- Cloudinary: For storing storing images
+- Cloudinary: A cloud service for storing media.
+- ChakraUI: A component library.
 ## Setup
 
 1. Clone the repository:
@@ -67,6 +68,8 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 
 9. Contributing
     Contributions are welcome!
+10. UI
+    You can open the client folder to see the UI of the application I have updated the readme file over there as well
 ## My message
    If you are viewing this repository then my message to you is that if you find any bugs/errors/potential threats please feel free to reachout and inform me about that :
    My name: Deepayan Mukhopadhyay 
