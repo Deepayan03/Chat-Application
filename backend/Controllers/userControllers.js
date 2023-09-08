@@ -84,7 +84,7 @@ const allUsers = async (req, res, next) => {
         console.log('Image deleted successfully:', result);
       }
     });
-    console.log(id,url,OldpublicId);
+    // console.log(id,url,OldpublicId);
     const user=await User.findById(id);
     user.avatar=url;
     await user.save();

@@ -2,7 +2,7 @@ const AppError = require("../utils/utilError.js");
 const Chat = require("../models/chatModel.js");
 const User = require("../models/userModel.js");
 const Message = require("../models/messageModel.js");
-
+const cloudinary = require("cloudinary").v2;
 const accessChat = async (req, res, next) => {
   const { userId } = req.body;
   console.log(userId);
@@ -201,7 +201,36 @@ const deleteChats=async(req,res,next)=>{
 }
 
 const changeGroupChatAvatar=async(req,res,next)=>{
-  
+  try {
+    const {id, url , OldpublicId}=req.body;
+    console.log(id,url,OldpublicId);
+    if(OldpublicId){
+    cloudinary.config({
+      cloud_name: process.env.cloudName,
+      api_key: process.env.cloudinaryAPIKey,
+      api_secret: process.env.cloudinarySecret,
+    });
+    cloudinary.uploader.destroy(OldpublicId, (error, result) => {
+      if (error) {
+        console.error('Error deleting image:', error);
+      } else {
+        console.log('Image deleted successfully:', result);
+      }
+    });
+  }
+    const chat = await Chat.findById(id).
+    populate("users", "-password").
+    populate("groupAdmin", "-password");
+    chat.avatar = url;
+    await chat.save();
+    res.status(200).json({
+      success:"true",
+      message:"Avatar changed successfully",
+      data:chat
+    });
+  } catch (error) {
+    return next(new AppError(error.message,400));
+  }
 }
 module.exports = {
   accessChat,

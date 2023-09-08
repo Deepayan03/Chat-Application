@@ -1,9 +1,17 @@
 import { Avatar } from "@chakra-ui/avatar";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Box, Text } from "@chakra-ui/layout";
-import { Checkbox } from "@chakra-ui/react";
+import { Button, Checkbox, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 
-const UserListItem = ({ user,handleFunction, forGroupChat=false,setAddedUsers,addedUsers }) => {
-  // console.log(user);
+const UserListItem = ({
+  user,
+  handleFunction,
+  forGroupChat = false,
+  setAddedUsers,
+  addedUsers,
+  groupInfo = false,
+  handleRemove
+}) => {
   const handleCheckboxChange = (userId) => {
     if (addedUsers.includes(userId)) {
       // If the user ID is already in the array, remove it
@@ -11,7 +19,7 @@ const UserListItem = ({ user,handleFunction, forGroupChat=false,setAddedUsers,ad
     } else {
       // If the user ID is not in the array, add it
       setAddedUsers([...addedUsers, userId]);
-      console.log(addedUsers)
+      console.log(addedUsers);
     }
   };
   return (
@@ -46,10 +54,45 @@ const UserListItem = ({ user,handleFunction, forGroupChat=false,setAddedUsers,ad
           {user.email}
         </Text>
       </Box>
-      {forGroupChat && <Checkbox size='md' colorScheme='green' 
-         isChecked={addedUsers.includes(user._id)} 
-         onChange={() => handleCheckboxChange(user._id)} 
-      />}
+      {forGroupChat && (
+        <Checkbox
+          size="md"
+          colorScheme="green"
+          isChecked={addedUsers.includes(user._id)}
+          onChange={() => handleCheckboxChange(user._id)}
+        />
+      )}
+      {
+        groupInfo && (
+          <Box>
+          <Menu placement="bottom-end">
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon/>} borderRadius="35px"/>
+            <MenuList
+              bg="blue.300"
+              borderRadius="15px"
+              cursor="pointer"
+              color="black"
+              p={2}
+            >
+              <MenuItem  bg="blue.300" _hover={{
+                bg:"blue.500",
+                color:"white",
+                borderRadius:"15px"
+              }} >Promote as admin</MenuItem>
+              <MenuItem  
+              bg="blue.300" 
+              _hover={{
+                bg:"blue.500",
+                color:"white",
+                borderRadius:"15px"
+              }}
+              onClick={()=>handleRemove(user)}
+              >Remove participant</MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+        )
+      }
     </Box>
   );
 };

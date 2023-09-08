@@ -261,7 +261,7 @@ const MyChats = () => {
                           </Text>
                         </Box>
                       </div>
-                      <Box zIndex={"3"}>
+                      <Box >
                         <Menu
                           style={{
                             position: "absolute",

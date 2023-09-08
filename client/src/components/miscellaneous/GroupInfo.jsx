@@ -35,7 +35,10 @@ const GroupInfo = ({ fetchMessages }) => {
     refresh,
     setRefresh,
   } = ChatState();
+
   const toast = useToast();
+  const [loading,setLoading]=useState(false);
+  // For renaming the group chat
   const handleRename = async (groupChatName) => {
     if (!groupChatName) {
       return;
@@ -74,9 +77,12 @@ const GroupInfo = ({ fetchMessages }) => {
     // setGroupChatName("");
     // onClose();
   };
-  const handleRemove = async (userToBeRemoved) => {
+
+
+  // For removing participants from a group
+  const handleRemove = async (userToBeRemoved,self=false) => {
     // console.log(selectedChat.groupAdmin._id, user._id);
-    if (selectedChat.groupAdmin._id === loggedUser._id) {
+    if (self && (selectedChat.groupAdmin._id === loggedUser._id)) {
       toast({
         title: "Admin cannot leave the group",
         status: "error",
@@ -134,6 +140,7 @@ const GroupInfo = ({ fetchMessages }) => {
       //   setLoading(false);
     }
   };
+  // For adding new users
   const handleAddUser = async (usersToBeAdded) => {
     let isArrayEmpty = (arr) => arr.length === 0;
     if (isArrayEmpty(usersToBeAdded)) {
@@ -214,9 +221,77 @@ const GroupInfo = ({ fetchMessages }) => {
       console.log(error);
     }
   };
+  // To change the avatar of a group Chat 
+  const handleChangeGroupAvatar = async (avatar) => {
+    if (!avatar) {
+      toast({
+        title: "Please upload a picture first",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
+    setLoading(true)
+    if (avatar.type === "image/jpeg" || avatar.type === "image/png"){
+      let formdata = new FormData();
+      // console.log(avatar);
+      formdata.append("file", avatar);
+      formdata.append("upload_preset", "chat-app");
+      formdata.append("cloud_name", "dnymefrvq");
+      let oldAvatarUrl = selectedChat.avatar;
+      let OldpublicId = oldAvatarUrl.split('/').pop().split('.')[0];
+      // console.log(OldpublicId);
+      try {
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dnymefrvq/image/upload",
+          {
+            method: "post",
+            body: formdata,
+          }
+        );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        const res = await response.json();
+        // console.log(res);
+        let id = selectedChat._id;
+        let url = res.url.toString();
+        const {data} = await axios.put("/api/chat/change-group-avatar", { id, url , OldpublicId }, config);
+        const updatedGroupChatInfo = data.data;
+        console.log(updatedGroupChatInfo)
+        setSelectedChat(updatedGroupChatInfo);
+        setRefresh(!refresh);
+        setLoading(false);
+        toast({
+          title: "Profile picture updated successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-right",
+        });
+      } catch (e) {
+        setLoading(false);
+        console.log(e);
+        toast({
+          title: "Profile picture update failed",
+          description:e.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-right",
+        });
+      }
+    }
+  };
 
-  const updateGroupAvatar = async (avatar) => {};
+
+
   const GroupNameInputRef = useRef(null);
+  const GroupAvatarInputRef = useRef(null);
+
   return (
     <Avatar
       src={selectedChat.avatar}
@@ -258,14 +333,28 @@ const GroupInfo = ({ fetchMessages }) => {
               <Avatar
                 height={"200px"}
                 width={"200px"}
-                src={user.avatar}
-                alt={user.name}
+                src={selectedChat.avatar}
+                alt={selectedChat.name}
               />
             </Box>
-            <Box display={"flex"} alignItems={"center"} justifyContent={"center"}  mb={5} >
-            <Button  onClick={() => updateGroupAvatar()}>
-              Update Group Avatar
-            </Button>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              mb={5}
+            >
+              <Input
+                display={"none"}
+                type="file"
+                p={1.5}
+                accept="image/*"
+                ref={GroupAvatarInputRef}
+                onChange={(e) => handleChangeGroupAvatar(e.target.files[0])}
+              ></Input>
+
+              <Button isLoading={loading} onClick={() => GroupAvatarInputRef.current.click()}>
+                Update Group Avatar
+              </Button>
             </Box>
             <Box>
               <Text fontFamily={"sans-serif"} color="white" fontSize={"16px"}>
@@ -362,18 +451,20 @@ const GroupInfo = ({ fetchMessages }) => {
               <Text fontSize={"16px"} color="white" fontFamily={"sans-serif"}>
                 Users
               </Text>
+              {console.log(selectedChat)}
               {selectedChat.users?.map((item) => (
                 <UserListItem
+                  groupInfo={true}
                   key={item._id}
                   user={item}
-                  handleFunction={() => handleAddUser(item)}
+                  handleRemove={handleRemove}
                 />
               ))}
             </Box>
             <Box>
               <Button
                 colorScheme="red"
-                onClick={() => handleRemove(loggedUser)}
+                onClick={() => handleRemove(loggedUser,true)}
               >
                 Exit Group
               </Button>
