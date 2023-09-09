@@ -232,6 +232,53 @@ const changeGroupChatAvatar=async(req,res,next)=>{
     return next(new AppError(error.message,400));
   }
 }
+
+const promoteAsGroupAdmin=async(req,res,next)=>{
+  try {
+  const {userId,chatId}=req.body;
+  const chat=await Chat.findByIdAndUpdate(chatId,
+    {
+      $push: {groupAdmin:userId}
+    },{
+      new:true
+    }).populate("users", "-password")
+    .populate("groupAdmin", "-password");
+    if(!chat){
+      return next(new AppError("Group not found",400));
+    }
+    res.status(200).json({
+      success:true,
+      message:"Successfully promoted as group Admin",
+      data: chat
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new AppError(error.message,400));
+  }
+}
+
+const removeAsGroupAdmin=async(req,res,next)=>{
+  try {
+    const {userId,chatId}=req.body;
+    const chat=await Chat.findByIdAndUpdate(chatId,
+      {
+        $pull: {groupAdmin:userId}
+      },{
+        new:true
+      }).populate("users", "-password")
+      .populate("groupAdmin", "-password");
+      if(!chat){
+        return next(new AppError("Group not found",400));
+      }
+      res.status(200).json({
+        success:true,
+        message:"Removed user as admin",
+        data: chat
+      });
+  } catch (error) {
+    return next(new AppError(error.message,400));
+  }
+}
 module.exports = {
   accessChat,
   fetchChats,
@@ -240,5 +287,7 @@ module.exports = {
   addToGroup,
   remove,
   deleteChats,
-  changeGroupChatAvatar
+  changeGroupChatAvatar,
+  promoteAsGroupAdmin,
+  removeAsGroupAdmin
 };

@@ -287,7 +287,68 @@ const GroupInfo = ({ fetchMessages }) => {
     }
   };
 
+  const handleAdminPromotion=async(userId,chatId)=>{
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const {data} = await axios.put("/api/chat/promoteAsGroupAdmin", { userId,chatId }, config);
+      console.log(data.data);
+      setSelectedChat(data.data);
+      toast({
+        title: "Promoted as admin",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-right",
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Promotion failed",
+        description:error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-right",
+      });
+    }
 
+    
+  }
+
+  const handleAdminRemoval=async(userId,chatId)=>{
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const {data} = await axios.put("/api/chat/removeAsGroupAdmin", { userId,chatId }, config);
+      console.log(data.data);
+      setSelectedChat(data.data);
+      toast({
+        title: "Removed as admin successfully",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-right",
+        colorScheme:"red"
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Removal as admin failed",
+        description:error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-right",
+      });
+    }
+  }
 
   const GroupNameInputRef = useRef(null);
   const GroupAvatarInputRef = useRef(null);
@@ -447,7 +508,6 @@ const GroupInfo = ({ fetchMessages }) => {
                   </Box>
                 </AddUsersToGroup>
               }
-
               <Text fontSize={"16px"} color="white" fontFamily={"sans-serif"}>
                 Users
               </Text>
@@ -458,6 +518,10 @@ const GroupInfo = ({ fetchMessages }) => {
                   key={item._id}
                   user={item}
                   handleRemove={handleRemove}
+                  groupAdmin={selectedChat.groupAdmin}
+                  currentUser={user.data}
+                  handleAdminRemoval={(userId,chatId)=>handleAdminRemoval(userId,chatId)}
+                  handleAdminPromotion={(userId,chatId)=>handleAdminPromotion(userId,chatId)}
                 />
               ))}
             </Box>

@@ -208,7 +208,7 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        bg="black"
+        bg="blue.600"
         w="100%"
         p="7px"
         borderRadius={"35px"}
@@ -218,7 +218,9 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button
             variant="ghost"
-            bg={"gray.400"}
+            bg={"blue.100"}
+            _hover={{bgColor:"white",color:"black"}}
+            color={"blue.900"}
             borderRadius={"30px"}
             onClick={onOpen}
           >
@@ -234,8 +236,8 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
         <div>
           <Menu>
             <MenuButton p={1}>
-              <BellIcon fontSize="2xl" m={0} color={"blue.50"} />
-              {notification.length && (
+              <BellIcon fontSize="2xl" m={0}  color={"blue.50"} />
+              {notification.length>0 && (
                 <Badge
                   position="absolute"
                   colorScheme="red"
@@ -263,7 +265,7 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
                       }: \n ${truncateString(item.content, 3)}`}
                 </MenuItem>
               ))}
-              {notification.length > 0 && (
+              {notification.length !==0 && (
                 <MenuItem display={"flex"} alignItems={"flex-start"}>
                   {notification.length > 0 && (
                     <Button
@@ -319,7 +321,7 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
         bgColor="yellow"
       >
         <DrawerOverlay />
-        <DrawerContent bgColor="black">
+        <DrawerContent bgColor="blue.900">
           <DrawerHeader color="white" borderBottomWidth="1px">
             Search Users
           </DrawerHeader>
@@ -332,7 +334,7 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button bgColor="blue.800" onClick={handleSearch} color={"white"}>
+              <Button bgColor="blue.500" _hover={{color:"black", bg:"white"}} onClick={handleSearch} color={"white"}>
                 Search
               </Button>
             </Box>

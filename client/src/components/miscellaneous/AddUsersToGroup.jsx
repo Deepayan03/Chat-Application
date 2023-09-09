@@ -30,7 +30,9 @@ const AddUsersToGroup = ({children,handleAddUser}) => {
           const { data } = await axios.get(`/api/user?search=${search}`, config);
           // console.log(data);
           setLoading(false);
-          setSearchResult(data);
+          const userIds = selectedChat.users.map(item => item._id);
+          console.log(userIds);
+          setSearchResult(data.filter(item => !userIds.includes(item._id)));
         } catch (error) {
           toast({
             title: "Error Occured!",
@@ -55,7 +57,7 @@ const AddUsersToGroup = ({children,handleAddUser}) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{selectedChat.chatName}</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton onClick={()=>setAddedUsers([])}/>
         <ModalBody>
             
           <FormControl>
@@ -77,6 +79,7 @@ const AddUsersToGroup = ({children,handleAddUser}) => {
                   forGroupChat={true}
                   setAddedUsers={setAddedUsers}
                   addedUsers={addedUsers}
+                  currentUser={user.data}
                 />
               ))
           )}

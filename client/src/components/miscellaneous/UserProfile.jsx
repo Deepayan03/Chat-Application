@@ -17,13 +17,14 @@ const UserProfile = ({ children,user,changeAvatar,isLoading }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const fileInputRef = useRef(null);
   return (
-    <Box>
+    <Box >
       <span onClick={onOpen}>{children} </span>
       <Drawer
         placement={"right"}
         onClose={onClose}
         isOpen={isOpen}
         size={{ md: "full", lg: "sm" }}
+        
       >
         <DrawerOverlay />
         <DrawerContent>
@@ -37,7 +38,6 @@ const UserProfile = ({ children,user,changeAvatar,isLoading }) => {
                   fontFamily: "Poppins, sans-serif",
                   fontSize: "30px",
                   color: "white",
-                  background: "",
                 }}
               >
                 My Profile

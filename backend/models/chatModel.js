@@ -18,10 +18,10 @@ const schema={
         type:Schema.Types.ObjectId,
         ref:"Message"
     },
-    groupAdmin:{
+    groupAdmin:[{
         type:Schema.Types.ObjectId,
         ref:"Chat_App_Users"
-    },
+    }],
     avatar: {
         type: String,
         default:

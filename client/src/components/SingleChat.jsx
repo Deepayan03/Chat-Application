@@ -295,9 +295,9 @@ const SingleChat = () => {
           alignItems={"center"}
           justifyContent={"center"}
           h="100%"
-          bgColor={"yellow"}
+          bgColor={"blue.700"}
         >
-          <Text fontSize={"3xl"} pb={3} fontFamily={"WorkSans"} color={"black"}>
+          <Text fontSize={"3xl"} pb={3} fontFamily={"WorkSans"} color={"white"}>
             Click on users to start Chatting
           </Text>
         </Box>
