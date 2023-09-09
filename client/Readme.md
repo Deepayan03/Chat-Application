@@ -1,2 +1,2 @@
 # Login UI
-    ![GitHub Logo](https://github.com/Deepayan03/Chat-Application/blob/master/client/UI/Login.png)
+   <img src="http://url/image.png" height="60" width="60">
