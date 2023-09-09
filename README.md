@@ -41,7 +41,7 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
     npm install
 3. Create a .env file in the server directory with the following configuration:
     ```bash
-    PORT=3001
+    PORT=5001
     MONGODB_URI=<your-mongodb-uri>
     SECRET_KEY=<your-secret-key>
     PORT: The port on which the server will run.
