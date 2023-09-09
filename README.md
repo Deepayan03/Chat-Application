@@ -12,12 +12,12 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 - Creation or group chats
 - Changing of profile pictures
 - Emoji Support
+- Multiple group admins and more control over the group roles
+- More control over updation of User details.
 
 ## Future Enhancements
 - Read Recipents
-- Multiple group admins and more control over the group roles
 - Image support
-- More control over updation of User details.
 
 ## Technologies Used
 
@@ -28,6 +28,7 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 - Socket.io: A library for enabling real-time, bidirectional communication between clients and the server.
 - Cloudinary: A cloud service for storing media.
 - ChakraUI: A component library.
+
 ## Setup
 
 1. Clone the repository:
