@@ -14,8 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender, getSenderFull } from "../config/ChatLogic";
-import ProfileModel from "./miscellaneous/profileModel";
-// import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChaModal";
 import axios from "axios";
 import "./style.css";
 import ScrollableChat from "./ScrollableChat";
