@@ -38,6 +38,7 @@ const GroupInfo = ({ fetchMessages }) => {
 
   const toast = useToast();
   const [loading,setLoading]=useState(false);
+  const checkIfAdmin=(groupAdmin,user)=>{return groupAdmin.some((item) => item._id === user._id)}
   // For renaming the group chat
   const handleRename = async (groupChatName) => {
     if (!groupChatName) {
@@ -82,7 +83,7 @@ const GroupInfo = ({ fetchMessages }) => {
   // For removing participants from a group
   const handleRemove = async (userToBeRemoved,self=false) => {
     // console.log(selectedChat.groupAdmin._id, user._id);
-    if (self && (selectedChat.groupAdmin._id === loggedUser._id)) {
+    if (self && (checkIfAdmin(selectedChat.groupAdmin,user.data))) {
       toast({
         title: "Admin cannot leave the group",
         status: "error",
@@ -92,9 +93,10 @@ const GroupInfo = ({ fetchMessages }) => {
       });
       return;
     }
+    console.log(userToBeRemoved._id , user.data._id);
     if (
-      selectedChat.groupAdmin._id !== loggedUser._id &&
-      userToBeRemoved._id !== loggedUser._id
+      checkIfAdmin(selectedChat.groupAdmin,user.data) &&
+      userToBeRemoved._id === user.data._id
     ) {
       toast({
         title: "Only admins can remove someone",
@@ -169,7 +171,7 @@ const GroupInfo = ({ fetchMessages }) => {
     }
 
     // console.log(selectedChat.groupAdmin._id, loggedUser._id);
-    if (selectedChat.groupAdmin._id !== loggedUser._id) {
+    if (checkIfAdmin(selectedChat.groupAdmin, loggedUser._id)){
       toast({
         title: "Only admins can add someone",
         status: "error",

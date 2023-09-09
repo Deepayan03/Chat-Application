@@ -95,8 +95,8 @@ const Login = () => {
       _hover={{ bgColor: '#ebedf0' }}
       style={{marginTop:15}}
       onClick={()=>{
-        setEmail("johnnySinsAllRounder@gmail.com");
-        setPassword("deepayan@2003");
+        setEmail("Test1@gmail.com");
+        setPassword("Test1@gmail.com");
       }}
       >
         Get Guest User Credentials

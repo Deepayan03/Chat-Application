@@ -40,7 +40,7 @@ const UserProfile = ({ children,user,changeAvatar,isLoading,self=false }) => {
                   color: "white",
                 }}
               >
-                My Profile
+              {  self ? "My Profile":"UserInfo"}
               </h1>
               <CloseIcon onClick={onClose} color={"white"} />
             </Box>
