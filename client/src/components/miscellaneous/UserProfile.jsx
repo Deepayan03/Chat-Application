@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useRef } from "react";
-const UserProfile = ({ children,user,changeAvatar,isLoading }) => {
+const UserProfile = ({ children,user,changeAvatar,isLoading,self=false }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const fileInputRef = useRef(null);
   return (
@@ -56,7 +56,7 @@ const UserProfile = ({ children,user,changeAvatar,isLoading }) => {
               <Avatar height={"200px"} width={"200px"}  src={user.avatar}
               alt={user.name} />
             </Box>
-            <Box
+            {self && <Box
               display={"flex"}
               justifyContent={"center"}
               alignSelf={"center"}
@@ -79,7 +79,7 @@ const UserProfile = ({ children,user,changeAvatar,isLoading }) => {
               >
                 Change Profile Picture
               </Button>
-            </Box>
+            </Box>}
             <Box>
               <Text fontFamily={"sans-serif"} color="white" fontSize={"16px"}>
                 Your Name:

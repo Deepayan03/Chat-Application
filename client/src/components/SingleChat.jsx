@@ -23,6 +23,7 @@ import io from "socket.io-client";
 import Lottie from "react-lottie";
 import animationData from "../assets/animation_llzlhaex.json";
 import GroupInfo from "./miscellaneous/GroupInfo";
+import UserProfile from "./miscellaneous/UserProfile";
 const ENDPOINT = "http://127.0.0.1:5001";
 
 let socket, selectedChatCompare;
@@ -210,7 +211,7 @@ const SingleChat = () => {
                   <span style={{ color: "red",fontSize:"20px",marginLeft:"25px",padding:"0px"}}>Online</span>
                 ) : null}
                 </div>
-                <ProfileModel
+                <UserProfile
                   user={getSenderFull(loggedUser, selectedChat.users)}
                 >
                   <Avatar
@@ -218,7 +219,7 @@ const SingleChat = () => {
                     name={selectedChat.name}
                     cursor={"pointer"}
                   ></Avatar>
-                </ProfileModel>
+                </UserProfile>
                 {console.log(onlineUsers)}
               </>
             ) : (

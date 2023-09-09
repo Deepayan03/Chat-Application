@@ -300,11 +300,11 @@ function SideDrawer({setSingleChatActive,singleChatActive}) {
               <UserProfile
               user={userProfile.data || user.data}
               changeAvatar={(avatar) => handleChangeAvatar(avatar)}
+              self={true}
               isLoading={profilePictureLoading}
               >
                 <MenuItem bg="gray.300">My Profile</MenuItem>{" "}
                 </UserProfile>
-              {/* </ProfileModel> */}
               <MenuDivider color={"black"} />
               <MenuItem bg="gray.300" onClick={logoutHandler}>
                 Logout
