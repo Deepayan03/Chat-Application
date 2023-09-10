@@ -14,43 +14,44 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender, getSenderFull } from "../config/ChatLogic";
-import ProfileModel from "./miscellaneous/profileModel";
-import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChaModal";
 import axios from "axios";
-import "./style.css"
+import "./style.css";
 import ScrollableChat from "./ScrollableChat";
-import io from "socket.io-client"
-import Lottie from "react-lottie"
-import animationData from "../assets/animation_llzlhaex.json"
-const ENDPOINT="http://127.0.0.1:5001";
+import io from "socket.io-client";
+import Lottie from "react-lottie";
+import animationData from "../assets/animation_llzlhaex.json";
+import GroupInfo from "./miscellaneous/GroupInfo";
+import UserProfile from "./miscellaneous/UserProfile";
+const ENDPOINT = "http://127.0.0.1:5001";
 
-
-let socket,selectedChatCompare;
+let socket, selectedChatCompare;
 
 const SingleChat = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
-  const [socketConnected,setSocketConnected]=useState(false);
+  const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const {
     user,
     selectedChat,
     setSelectedChat,
     loggedUser,
     refresh,
-    setRefresh
+    setRefresh,
+    notification,
+    setNotification,
   } = ChatState();
-
-  const defaultOptions={
-    loop:true,
-    autoplay:true,
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
     animationData: animationData,
-    rendererSettings:{
-      preserveAspectRatio:"XMidYMid slice"
-    }
-  }
+    rendererSettings: {
+      preserveAspectRatio: "XMidYMid slice",
+    },
+  };
   const toast = useToast();
   const fetchMessages = async () => {
     if (!selectedChat) {
@@ -86,7 +87,7 @@ const SingleChat = () => {
   };
   const sendMessage = async (event) => {
     if ((event.type === "click" || event.key === "Enter") && newMessage) {
-      socket.emit("stop typing",selectedChat._id);
+      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -120,14 +121,17 @@ const SingleChat = () => {
     }
   };
   useEffect(() => {
+    // console.log(user.data);
     socket = io(ENDPOINT);
     socket.emit("setup", user.data);
     socket.on("connected", () => setSocketConnected(true));
-    socket.on("typing",()=>setIsTyping(true));
-    socket.on("stop typing",()=>setIsTyping(false));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+    socket.on("online users", (onlineUsers) => {
+      setOnlineUsers(onlineUsers);
+    });
     // eslint-disable-next-line
   }, []);
-
 
   useEffect(() => {
     setLoading(true);
@@ -137,54 +141,57 @@ const SingleChat = () => {
     // eslint-disable-next-line
   }, [selectedChat]);
 
-  
+  // console.log(notification);
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-       //Notify
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          setRefresh(!refresh);
+        }
       } else {
         setMessages([...messages, newMessageRecieved]);
+        setRefresh(!refresh);
       }
     });
   });
-  
-
   const typingHandler = (e) => {
-    console.log(selectedChat);
+    // console.log(selectedChat);
     setNewMessage(e.target.value);
     //Typing indicator logic
-    if(!socketConnected){
-      return ;
+    if (!socketConnected) {
+      return;
     }
-    if(!typing){
+    if (!typing) {
       setTyping(true);
-      socket.emit("typing",selectedChat._id)
+      socket.emit("typing", selectedChat._id);
     }
-    let lastTypingTime=new Date().getTime();
-    let timerLength=3000;
-    setTimeout(()=>{
-      var timeNow=new Date().getTime();
-      var timeDiff=timeNow-lastTypingTime;
-      if(timeDiff>=timerLength && typing){
-        socket.emit("stop typing",selectedChat._id);
+    let lastTypingTime = new Date().getTime();
+    let timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
         setTyping(false);
       }
-    },timerLength)
-    };
+    }, timerLength);
+  };
   return (
     <>
       {selectedChat ? (
         <>
           <Text
-            fontSize={{ base: "28px", md: "30px" }}
-            pb={3}
-            px={2}
+            fontSize={{ base: "21px", md: "30px" }}
+            pb={{ base: "1", md: "3" }}
+            px={{ base: "1", md: "3" }}
             w="100%"
             fontFamily={"Work sans"}
             display={"flex"}
+            color={"white"}
             justifyContent={{ base: "space-between" }}
           >
             <IconButton
@@ -194,8 +201,15 @@ const SingleChat = () => {
             />
             {!selectedChat.isGroupChat ? (
               <>
+              <div style={{display:"flex",flexDirection:"column"}}>
                 {getSender(loggedUser, selectedChat.users)}
-                <ProfileModel
+                {onlineUsers.includes(
+                  getSenderFull(loggedUser, selectedChat.users)._id
+                ) ? (
+                  <span style={{ color: "red",fontSize:"20px",marginLeft:"25px",padding:"0px"}}>Online</span>
+                ) : null}
+                </div>
+                <UserProfile
                   user={getSenderFull(loggedUser, selectedChat.users)}
                 >
                   <Avatar
@@ -203,12 +217,14 @@ const SingleChat = () => {
                     name={selectedChat.name}
                     cursor={"pointer"}
                   ></Avatar>
-                </ProfileModel>
+                </UserProfile>
+                {console.log(onlineUsers)}
               </>
             ) : (
               <>
                 {selectedChat.chatName.toUpperCase()}
-                <UpdateGroupChatModal  fetchMessages={fetchMessages} />
+                {/* <UpdateGroupChatModal fetchMessages={fetchMessages} /> */}
+                <GroupInfo fetchMessages={fetchMessages}/>
               </>
             )}
           </Text>
@@ -222,6 +238,7 @@ const SingleChat = () => {
             h={"100%"}
             borderRadius={"lg"}
             overflowY={"hidden"}
+            pos={"relative"}
           >
             {loading ? (
               <Spinner
@@ -232,23 +249,33 @@ const SingleChat = () => {
                 margin={"auto"}
               />
             ) : (
-              <>{ <div className="messages">
-                <ScrollableChat messages={messages}/>
-              </div> }</>
+              <>
+                {
+                  <div className="messages">
+                    <ScrollableChat messages={messages} />
+                  </div>
+                }
+              </>
             )}
             <FormControl onKeyDown={(event) => sendMessage(event)}>
-              {!typing && isTyping?<div><Lottie
-                options={defaultOptions}
-                width={70}
-                style={{marginBottom:15,marginLeft:0}}
-              /></div>:(<></>)}
+              {!typing && isTyping ? (
+                <div>
+                  <Lottie
+                    options={defaultOptions}
+                    width={70}
+                    style={{ marginBottom: 15, marginLeft: 0 }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               <InputGroup variant="custom" colorScheme="purple">
                 <Input
                   onChange={typingHandler}
                   value={newMessage}
                   placeholder="Enter a Message"
                   borderRadius={"20px"}
-                  bgColor={"yellow"}
+                  bgColor={"white"}
                   color={"black"}
                 />
                 <InputRightElement
@@ -267,9 +294,9 @@ const SingleChat = () => {
           alignItems={"center"}
           justifyContent={"center"}
           h="100%"
-          bgColor={"yellow"}
+          bgColor={"blue.700"}
         >
-          <Text fontSize={"3xl"} pb={3} fontFamily={"WorkSans"} color={"black"}>
+          <Text fontSize={"3xl"} pb={3} fontFamily={"WorkSans"} color={"white"}>
             Click on users to start Chatting
           </Text>
         </Box>
@@ -279,4 +306,3 @@ const SingleChat = () => {
 };
 
 export default SingleChat;
- 

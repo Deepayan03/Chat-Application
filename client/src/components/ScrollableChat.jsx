@@ -6,10 +6,10 @@ import { Avatar, Tooltip } from "@chakra-ui/react";
 const ScrollableChat = ({ messages }) => {
   const { loggedUser } = ChatState();
   return (
-    <ScrollableFeed>
+    <ScrollableFeed style={{display:"flex",height:"100%"}} >
     {messages &&
       messages.map((m, i) => (
-        <div style={{ display: "flex" }} key={i}>
+        <div style={{ display: "flex", overflow:"hidden" }} key={i}>
           {(isSameSender(messages, m, i, loggedUser._id) ||
             isLastMessage(messages, i, loggedUser._id)) && (
             <Tooltip label={m.sender.name} placement="bottom-start" hasArrow>
@@ -34,6 +34,7 @@ const ScrollableChat = ({ messages }) => {
               marginLeft:isSameSenderMargin(messages,m,i,loggedUser._id),
               marginTop:isSameUser(messages,m,i,loggedUser._id),
               marginBottom:"15px",
+              
             }}
           >
             {m.content}

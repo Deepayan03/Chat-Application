@@ -7,14 +7,19 @@ const ChatProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false);
   const [selectedChat, setSelectedChat] = useState();
   const [chats, setChats] = useState([]);
-  const [loggedUser, setLoggedUser] = useState(0);
+  const [loggedUser, setLoggedUser] = useState();
+  const [notification,setNotification]=useState([]);
+  const [userProfile,setUserProfile]=useState();
   const history = useHistory();
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    setUser(userInfo);
     if (!userInfo) {
       history.push("/");
     }
+    userInfo && setUser(userInfo);
+    userInfo && setLoggedUser(userInfo.data);
+    userInfo && setUserProfile(userInfo);
+    
   }, [history]);
   return (
     <ChatContext.Provider
@@ -29,6 +34,10 @@ const ChatProvider = ({ children }) => {
         setRefresh,
         loggedUser,
         setLoggedUser,
+        notification,
+        setNotification,
+        userProfile,
+        setUserProfile
       }}
     >
       {children}

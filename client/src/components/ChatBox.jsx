@@ -10,10 +10,12 @@ const ChatBox = () => {
       // alignItems={"center"}
       flexDir="column"
       p={3}
-      bgColor="yellow"
-      w={{base:"100%", md:"68%"}}
+      bgColor="gray.600"
+      height={{base:"100%", md:"100%"}}
+      width={{base:"100%", md:"68%"}}
       borderRadius={"lg"}
       borderWidth={"1px"}
+      overflowY={'hidden'}
       >
       <SingleChat/>
    </Box>

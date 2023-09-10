@@ -1,7 +1,8 @@
 const AppError = require("../utils/utilError.js");
 const Chat = require("../models/chatModel.js");
 const User = require("../models/userModel.js");
-
+const Message = require("../models/messageModel.js");
+const cloudinary = require("cloudinary").v2;
 const accessChat = async (req, res, next) => {
   const { userId } = req.body;
   console.log(userId);
@@ -126,12 +127,13 @@ const renameGroup = async (req, res, next) => {
 };
 
 const addToGroup = async (req, res, next) => {
-  const { chatId, userId } = req.body;
+  const { chatId, userIds } = req.body;
+  console.log(userIds)
   try {
     const added = await Chat.findByIdAndUpdate(
       chatId,
       {
-        $push: { users: userId },
+        $push: { users: { $each: userIds } },
       },
       {
         new: true,
@@ -149,7 +151,7 @@ const addToGroup = async (req, res, next) => {
       });
     }
   } catch (error) {
-    return next(new AppError(e.message, 400));
+    return next(new AppError(error.message, 400));
   }
 };
 
@@ -180,6 +182,103 @@ const remove = async (req, res, next) => {
     return next(new AppError(e.message, 400));
   }
 };
+
+const deleteChats=async(req,res,next)=>{
+  try{
+    const chatId=req.query.chatId;
+    const query={chat: chatId};
+    await Message.deleteMany(query);
+    const deletedChat=await Chat.findByIdAndDelete(chatId);
+    return res.status(200).json({
+      success:true,
+      message:"Chat deleted successfully",
+      deletedChat : deletedChat
+    });
+  }catch(e){
+    console.log(e);
+    return next(new AppError(e.message,400));
+  }
+}
+
+const changeGroupChatAvatar=async(req,res,next)=>{
+  try {
+    const {id, url , OldpublicId}=req.body;
+    console.log(id,url,OldpublicId);
+    if(OldpublicId){
+    cloudinary.config({
+      cloud_name: process.env.cloudName,
+      api_key: process.env.cloudinaryAPIKey,
+      api_secret: process.env.cloudinarySecret,
+    });
+    cloudinary.uploader.destroy(OldpublicId, (error, result) => {
+      if (error) {
+        console.error('Error deleting image:', error);
+      } else {
+        console.log('Image deleted successfully:', result);
+      }
+    });
+  }
+    const chat = await Chat.findById(id).
+    populate("users", "-password").
+    populate("groupAdmin", "-password");
+    chat.avatar = url;
+    await chat.save();
+    res.status(200).json({
+      success:"true",
+      message:"Avatar changed successfully",
+      data:chat
+    });
+  } catch (error) {
+    return next(new AppError(error.message,400));
+  }
+}
+
+const promoteAsGroupAdmin=async(req,res,next)=>{
+  try {
+  const {userId,chatId}=req.body;
+  const chat=await Chat.findByIdAndUpdate(chatId,
+    {
+      $push: {groupAdmin:userId}
+    },{
+      new:true
+    }).populate("users", "-password")
+    .populate("groupAdmin", "-password");
+    if(!chat){
+      return next(new AppError("Group not found",400));
+    }
+    res.status(200).json({
+      success:true,
+      message:"Successfully promoted as group Admin",
+      data: chat
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new AppError(error.message,400));
+  }
+}
+
+const removeAsGroupAdmin=async(req,res,next)=>{
+  try {
+    const {userId,chatId}=req.body;
+    const chat=await Chat.findByIdAndUpdate(chatId,
+      {
+        $pull: {groupAdmin:userId}
+      },{
+        new:true
+      }).populate("users", "-password")
+      .populate("groupAdmin", "-password");
+      if(!chat){
+        return next(new AppError("Group not found",400));
+      }
+      res.status(200).json({
+        success:true,
+        message:"Removed user as admin",
+        data: chat
+      });
+  } catch (error) {
+    return next(new AppError(error.message,400));
+  }
+}
 module.exports = {
   accessChat,
   fetchChats,
@@ -187,4 +286,8 @@ module.exports = {
   renameGroup,
   addToGroup,
   remove,
+  deleteChats,
+  changeGroupChatAvatar,
+  promoteAsGroupAdmin,
+  removeAsGroupAdmin
 };

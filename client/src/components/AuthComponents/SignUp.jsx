@@ -11,7 +11,7 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState();
   const [avatar, setAvatar] = useState();
   const[loading,setLoading]=useState(false);
-  const {setUser}=ChatState();
+  const {setUser,setUserProfile}=ChatState();
   const handleClick=()=>{setShow(!show)};
   const toast=useToast();
   const history=useHistory();
@@ -92,6 +92,7 @@ const SignUp = () => {
       });
       localStorage.setItem("userInfo",JSON.stringify(data));
       setUser(data);
+      setUserProfile(data);
       setLoading(false);
       history.push("/chats")
     } catch (error) {
