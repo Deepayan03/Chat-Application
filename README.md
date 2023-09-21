@@ -34,7 +34,7 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Deepayan03/Chat-Application.git)https://github.com/Deepayan03/Chat-Application.git
+   git clone https://github.com/Deepayan03/Chat-Application.git
 2. Install dependencies for the server:
     ```bash
     cd server
