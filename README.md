@@ -34,7 +34,7 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Deepayan03/Chat-Application.git)https://github.com/Deepayan03/Chat-Application.git
+   git clone https://github.com/Deepayan03/Chat-Application.git
 2. Install dependencies for the server:
     ```bash
     cd server
@@ -54,24 +54,24 @@ This is a simple chat application built using the MERN stack (MongoDB, Express.j
      ```bash
      cd client
      npm install
-6. # Start the client:
+6.  Start the client:
     ```bash
     Copy code
     npm start
-7. # Access the chat application in your web browser at http://localhost:3000.
+7.  Access the chat application in your web browser at http://localhost:3000.
 
-8. # Usage:
+8.  Usage:
     - Register a new account or log in with an existing account.
     - Create or join chat rooms.
     - Start chatting with other users in real-time.
     - View the online status of other users.
     - See typing indicators when other users are typing.
 
-9. # Contributing:
+9.  Contributing:
     - Contributions are welcome!
-10. # UI
+10.  UI
     - You can open the client folder to see the UI of the application I have updated the readme file over there as well
-## My message
+# My message
    If you are viewing this repository then my message to you is that if you find any bugs/errors/potential threats please feel free to reachout and inform me about that :
    My name: Deepayan Mukhopadhyay 
    My email: mukhopadhyaydeepayan@gmail.com
